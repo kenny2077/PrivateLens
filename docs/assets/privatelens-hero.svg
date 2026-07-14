@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="520" viewBox="0 0 1600 520" role="img" aria-labelledby="title desc">
+  <title id="title">PrivateLens</title>
+  <desc id="desc">PrivateLens: search what you remember, keep what you own. Local-first, read-only, explainable photo search.</desc>
+  <defs>
+    <linearGradient id="background" x1="92" y1="0" x2="1458" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#070B18"/>
+      <stop offset="0.5" stop-color="#11143A"/>
+      <stop offset="1" stop-color="#071A2A"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="0" cy="0" r="1" gradientTransform="translate(1245 238) rotate(180) scale(460 360)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7C3AED" stop-opacity="0.34"/>
+      <stop offset="0.52" stop-color="#0EA5E9" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#070B18" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="980" y1="84" x2="1434" y2="431" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67E8F9"/>
+      <stop offset="0.5" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#F472B6"/>
+    </linearGradient>
+    <radialGradient id="glass" cx="0" cy="0" r="1" gradientTransform="translate(1186 190) rotate(53) scale(236)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#312E81"/>
+      <stop offset="0.56" stop-color="#111B3A"/>
+      <stop offset="1" stop-color="#070B18"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#A5B4FC" stroke-opacity="0.07"/>
+    </pattern>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="9" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="520" rx="28" fill="url(#background)"/>
+  <rect width="1600" height="520" rx="28" fill="url(#grid)"/>
+  <rect width="1600" height="520" rx="28" fill="url(#aura)"/>
+  <path d="M0 443C294 349 506 503 789 424c302-84 514-294 811-206v302H0Z" fill="#0EA5E9" fill-opacity="0.045"/>
+  <path d="M0 468C311 371 542 524 844 431c286-88 493-236 756-169" fill="none" stroke="#67E8F9" stroke-opacity="0.13" stroke-width="2"/>
+
+  <g transform="translate(112 93)">
+    <rect width="72" height="72" rx="22" fill="#111936" stroke="url(#accent)" stroke-width="2"/>
+    <circle cx="36" cy="36" r="23" fill="none" stroke="#A5B4FC" stroke-width="3"/>
+    <path d="M36 13a23 23 0 0 1 20 12L36 36 23 18a23 23 0 0 1 13-5Zm20 12a23 23 0 0 1-1 24L36 36l20-11ZM55 49a23 23 0 0 1-20 10l1-23 19 13ZM35 59a23 23 0 0 1-19-13l20-10-1 23ZM16 46a23 23 0 0 1 1-24l19 14-20 10ZM17 22a23 23 0 0 1 19-9v23L17 22Z" fill="url(#accent)" fill-opacity="0.88"/>
+    <circle cx="36" cy="36" r="8" fill="#09101F" stroke="#67E8F9" stroke-width="2"/>
+  </g>
+
+  <text x="112" y="238" fill="#F8FAFC" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="82" font-weight="720" letter-spacing="-3">PrivateLens</text>
+  <text x="116" y="292" fill="#C7D2FE" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="27" font-weight="500">Search what you remember. Keep what you own.</text>
+
+  <g font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14" font-weight="700" letter-spacing="1.8">
+    <rect x="112" y="340" width="156" height="42" rx="21" fill="#67E8F9" fill-opacity="0.1" stroke="#67E8F9" stroke-opacity="0.55"/>
+    <circle cx="137" cy="361" r="5" fill="#67E8F9"/>
+    <text x="151" y="366" fill="#A5F3FC">LOCAL-FIRST</text>
+    <rect x="282" y="340" width="150" height="42" rx="21" fill="#A78BFA" fill-opacity="0.1" stroke="#A78BFA" stroke-opacity="0.55"/>
+    <circle cx="307" cy="361" r="5" fill="#A78BFA"/>
+    <text x="321" y="366" fill="#DDD6FE">READ-ONLY</text>
+    <rect x="446" y="340" width="170" height="42" rx="21" fill="#F472B6" fill-opacity="0.1" stroke="#F472B6" stroke-opacity="0.48"/>
+    <circle cx="471" cy="361" r="5" fill="#F472B6"/>
+    <text x="485" y="366" fill="#FBCFE8">EXPLAINABLE</text>
+  </g>
+
+  <g transform="translate(1192 256)">
+    <circle r="186" fill="#080D1D" stroke="url(#accent)" stroke-width="7"/>
+    <circle r="156" fill="url(#glass)" stroke="#33406C" stroke-width="2"/>
+    <circle r="126" fill="none" stroke="#A5B4FC" stroke-opacity="0.34" stroke-width="2" stroke-dasharray="5 13"/>
+    <g fill="url(#accent)" fill-opacity="0.86">
+      <path d="M0-112c38 0 72 19 92 50L0 0l-27-109c9-2 18-3 27-3Z"/>
+      <path d="M92-62c19 33 20 73 3 106L0 0l79-77c5 5 9 10 13 15Z" transform="rotate(60)"/>
+      <path d="M92-62c19 33 20 73 3 106L0 0l79-77c5 5 9 10 13 15Z" transform="rotate(120)"/>
+      <path d="M92-62c19 33 20 73 3 106L0 0l79-77c5 5 9 10 13 15Z" transform="rotate(180)"/>
+      <path d="M92-62c19 33 20 73 3 106L0 0l79-77c5 5 9 10 13 15Z" transform="rotate(240)"/>
+      <path d="M92-62c19 33 20 73 3 106L0 0l79-77c5 5 9 10 13 15Z" transform="rotate(300)"/>
+    </g>
+    <circle r="53" fill="#070B18" stroke="#A5B4FC" stroke-width="2"/>
+    <circle r="24" fill="#67E8F9" fill-opacity="0.12" stroke="#67E8F9" stroke-width="3" filter="url(#softGlow)"/>
+    <path d="m17 17 25 25" stroke="#67E8F9" stroke-width="8" stroke-linecap="round" filter="url(#softGlow)"/>
+  </g>
+
+  <g fill="#0B1225" stroke="#818CF8" stroke-opacity="0.38">
+    <rect x="1425" y="83" width="92" height="72" rx="13" transform="rotate(8 1425 83)"/>
+    <rect x="935" y="78" width="94" height="74" rx="13" transform="rotate(-9 935 78)"/>
+    <rect x="1461" y="356" width="86" height="68" rx="13" transform="rotate(-8 1461 356)"/>
+  </g>
+  <g stroke="#67E8F9" stroke-opacity="0.3" stroke-width="2" stroke-dasharray="4 7">
+    <path d="M1017 137 1068 170"/>
+    <path d="m1445 160-68 34"/>
+    <path d="m1442 374-67-28"/>
+  </g>
+  <circle cx="987" cy="112" r="5" fill="#A78BFA"/>
+  <circle cx="1481" cy="123" r="5" fill="#67E8F9"/>
+  <circle cx="1495" cy="386" r="5" fill="#F472B6"/>
+</svg>

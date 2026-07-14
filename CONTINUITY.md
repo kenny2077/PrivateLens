@@ -45,15 +45,12 @@ Milestones — Three facts only, no raw logs:
 - 1. Release PR #2 is fast-forward merged into public `main`; canonical history
   is noreply-only, and post-correction Python 3.11–3.13 plus Python/Actions
   CodeQL pass with zero open CodeQL, Dependabot, or secret-scanning alerts.
-- 2. Release-final source, the locked Python 3.11 full-stack setup, and the
-  definitive wheel/sdist pass 185 tests from both the worktree and extracted
-  sdist, lint/format/typing/bytecode/lock, pre-commit, strict metadata,
-  privacy/integrity review, and independent audits with no source blocker.
-- 3. Aggregate-only evaluation on 15 local images reached 91.7% hit@1, 100%
-  hit@5, and 95.8% MRR@5; final core/full arm64 images build, the full image
-  imports exact RapidOCR 1.4.4 and scans 15/15 read-only photos, the core passes
-  non-root/read-only health plus a 100% hit@5 synthetic benchmark, and both
-  Compose Ollama services use the same pinned image digest.
+- 2. Release-final source and the locked Python 3.11 full stack pass 185 tests,
+  package/container gates, and independent audits; aggregate-only evaluation
+  reached 91.7% hit@1, 100% hit@5, and 95.8% MRR@5 on 15 local images.
+- 3. The GitHub landing page now has an original protected-lens identity, a
+  product-first hero/fast-setup/search flow, a visually aligned terminal demo,
+  and the complete release, benchmark, privacy, and architecture record below.
 
 Critical Bugs / Software or Hardware or Network Issues — Three logs maximum:
 
@@ -75,13 +72,13 @@ Reflect on current working direction is not worth continuing or have better idea
 
 ## 3. Next Stage Implementation Plan — Update after every meaningful session
 
-- Focus 1: With action-time confirmation, submit the prepared PyPI OIDC
+- Focus 1: Review and publish the completed README/identity polish; local SVG,
+  GitHub Markdown, link, badge, lock, diff, and pre-commit checks pass.
+- Focus 2: With action-time confirmation, submit the prepared PyPI OIDC
   publisher for `kenny2077/PrivateLens`, `release.yml`, environment `pypi`;
   GitHub already enforces a no-bypass, tag-only `v*` deployment boundary.
-- Focus 2: Create and push the signed-off `v1.0.0` tag only after the publisher
+- Focus 3: Create and push the signed-off `v1.0.0` tag only after the publisher
   exists; main protection now enforces admins and requires all six release gates.
-- Focus 3: Verify PyPI/GitHub/core-GHCR artifacts externally, update release
-  truth, protect the release tag, and delete temporary release branches.
 
 ---
 
@@ -92,6 +89,10 @@ Files:
 - `docs/deep-analysis-and-roadmap.md`: canonical thesis and historical roadmap.
 - `CONTINUITY.md`: canonical anti-drift project briefing.
 - `README.md`: product positioning, installation, evidence, boundaries, and demo.
+- `docs/assets/privatelens-hero.svg` and `privatelens-mark.svg`: original
+  GitHub-facing PrivateLens identity assets.
+- `docs/assets/terminal-demo.svg`: branded, private-data-free terminal proof.
+- `docs/readme-product-design.md`: approved README assumptions and decision log.
 - `pyproject.toml`: package metadata, Python range, dependencies, and build config.
 - `uv.lock`: canonical locked dependency graph and Linux CPU-only Torch source.
 - `CHANGELOG.md`: stable 1.0.0 change and verification record.
@@ -117,6 +118,12 @@ Commands:
 # inspect continuity and worktree
 rtk read CONTINUITY.md
 rtk git status --short --branch
+
+# validate GitHub-facing product assets and Markdown
+xmllint --noout docs/assets/privatelens-mark.svg docs/assets/privatelens-hero.svg docs/assets/terminal-demo.svg
+sips -s format png docs/assets/privatelens-hero.svg --out /tmp/privatelens-hero.png
+jq -Rs '{text: ., mode: "gfm", context: "kenny2077/PrivateLens"}' README.md > /tmp/privatelens-readme.json
+gh api markdown --input /tmp/privatelens-readme.json > /tmp/privatelens-readme.html
 
 # canonical locked setup and validation
 rtk proxy uv sync --python 3.11 --locked --all-extras
