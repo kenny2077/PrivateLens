@@ -20,14 +20,15 @@ roadmap's highest-priority reliability gates:
 
 | Gate | Current evidence | Boundary |
 |------|------------------|----------|
-| Automated and vector correctness | 181 local tests plus lint, typing, bytecode, lock, and diff checks; a 1,001-vector regression covers the BLOB fallback and native-first path | Hosted Python/OS matrix remains pending |
+| Automated and vector correctness | 181 local tests plus lint, typing, bytecode, lock, and diff checks; a 1,001-vector regression covers the BLOB fallback and native-first path; hosted Python 3.11–3.13 and isolated wheel-consumer checks pass | Hosted jobs run on Linux; this is not a multi-OS claim |
 | 1,000-image reliability loop | Deterministic generated images complete scan, index, search, and an idempotent rerun | Uses extractor stand-ins; not a relevance or performance claim |
 | Real-photo retrieval | A 15-image local run reaches 91.7% hit@1, 100% hit@5, and 95.8% MRR@5 | Aggregate metrics only; the sample is too small for a broad quality claim |
-| CPU Docker | Core and full images build locally on arm64; the full image passes CPU-only ML imports, HEIC decoding, and a 15/15 scan from a read-only photo mount | Linux amd64, registry publication, and full Compose/Ollama remain pending |
+| CPU Docker | Core and full images build locally on arm64; the full image passes local CPU-only ML imports, HEIC decoding, and a 15/15 read-only scan; hosted CI builds it and passes HTTP health on Linux amd64 while running non-root with a read-only root filesystem | GHCR publication and full Compose/Ollama remain pending; hosted health is not a model-quality gate |
 
-Hosted CI, PyPI/GHCR publication, Linux amd64, and the complete Compose/Ollama
-flow remain open gates. CUDA and the desktop application are unsupported and
-are not shipped in 1.0. The historical body below remains the 2026-07-03
+PyPI/GHCR publication and the complete Compose/Ollama flow remain open gates.
+Hosted Python 3.11–3.13, isolated wheel-consumer, and Linux amd64 full-image
+build/HTTP-health checks pass. CUDA and the desktop application are unsupported
+and are not shipped in 1.0. The historical body below remains the 2026-07-03
 starting-point record rather than a live completion tracker.
 
 ## 1. Executive Summary

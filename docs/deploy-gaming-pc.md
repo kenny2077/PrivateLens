@@ -9,8 +9,10 @@ also unsupported and is not shipped in 1.0.
 For the currently exercised container path, use the
 [CPU Docker quick start](../README.md#docker-cpu-quick-start). Core and full CPU
 images build locally on arm64; the full image passes CPU-only ML imports, HEIC
-decoding, and a 15/15 scan from a read-only photo mount. The complete CPU
-Compose + Ollama flow and Linux amd64 execution remain open gates.
+decoding, and a 15/15 scan from a read-only photo mount. The hosted full image
+also builds and passes non-root/read-only HTTP health on Linux amd64. The
+complete CPU Compose + Ollama flow, bare-metal Linux, and every CUDA path remain
+open gates.
 
 ## Intended Target
 

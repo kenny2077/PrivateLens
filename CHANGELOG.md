@@ -6,9 +6,11 @@ All notable changes to PrivateLens will be documented in this file.
 
 ## [1.0.0] - 2026-07-14
 
-This entry describes the 1.0.0 release candidate. Hosted CI, PyPI/GHCR
-publication, Linux amd64 validation, and the complete Compose/Ollama gate remain
-pending; this changelog does not claim that 1.0.0 has been published.
+This entry describes the 1.0.0 release candidate. Hosted pull-request checks
+now pass Python 3.11–3.13, isolated wheel consumption, and a full CPU image
+build with HTTP health on Linux amd64 while running non-root with a read-only
+root filesystem. PyPI/GHCR publication and the complete Compose/Ollama gate
+remain pending; this changelog does not claim that 1.0.0 has been published.
 
 ### Added
 
@@ -37,6 +39,9 @@ pending; this changelog does not claim that 1.0.0 has been published.
   real-photo evaluation; only aggregate metrics are recorded.
 - Built core and full CPU images on local arm64; the full image passed CPU-only
   ML imports, HEIC decoding, and a 15/15 scan from a read-only photo mount.
+- Passed hosted Python 3.11–3.13 CI with isolated wheel-consumer verification.
+- Built and health-checked the full CPU image on hosted Linux amd64 while
+  running non-root with a read-only root filesystem.
 
 ### Security
 

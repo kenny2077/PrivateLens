@@ -12,8 +12,11 @@ Find your photos by meaning, not by scrolling. PrivateLens indexes your existing
 > **Release status:** This branch is the PrivateLens `1.0.0` release candidate,
 > not a published release. Local Apple Silicon gates include 181 tests, a
 > 1,000-image reliability run, a 15-image local real-photo evaluation reported
-> only in aggregate, and core/full CPU Docker builds. Hosted CI, PyPI/GHCR
-> publication, Linux amd64, and the full Compose/Ollama flow remain pending.
+> only in aggregate, and core/full CPU Docker builds. Hosted pull-request checks
+> pass Python 3.11–3.13 and an isolated wheel consumer; the full CPU image also
+> builds and passes HTTP health on Linux amd64 while running non-root with a
+> read-only root filesystem. PyPI/GHCR publication and the full Compose/Ollama
+> flow remain pending.
 > CUDA and the desktop application are unsupported and are not shipped in 1.0.
 
 ## Core Principles
@@ -35,9 +38,9 @@ Find your photos by meaning, not by scrolling. PrivateLens indexes your existing
 | Environment | Status |
 |-------------|--------|
 | macOS on Apple Silicon | Primary development environment; verified locally with memory-conscious settings |
-| CPU Docker image | Core and full images built locally on arm64; the full image passed CPU-only ML imports, HEIC decoding, and a 15/15 read-only scan |
+| CPU Docker image | Core and full images build locally on arm64; the hosted full image builds and passes HTTP health on Linux amd64 while running non-root with a read-only root filesystem |
 | Full Docker Compose + Ollama | Preview; full-stack validation is still pending |
-| Linux x86_64 | Documented CPU install path; amd64 runtime validation is still pending |
+| Linux x86_64 | Hosted Python 3.11–3.13 and full CPU-container gates pass on Linux; bare-metal installation is not separately validated |
 | Windows WSL2 | Not validated for 1.0 |
 | Native Windows | Not currently a supported target |
 | NVIDIA acceleration | Unsupported; 1.0 ships no CUDA image, Compose file, extra, or helper script |
@@ -257,24 +260,25 @@ This gate generates four inspectable, non-private images for a receipt, driver l
 
 ## Release-candidate verification
 
-| Gate | Local result on 2026-07-14 | Boundary |
+| Gate | Result on 2026-07-14 | Boundary |
 |------|----------------------------|----------|
-| Automated suite | 181 passing tests, plus lint, typing, bytecode, lock, and diff checks | Hosted Python/OS matrix remains pending |
+| Automated suite | 181 local tests plus lint, typing, bytecode, lock, and diff checks; hosted Linux x86_64 jobs pass on Python 3.11–3.13, including an isolated wheel consumer | Hosted jobs run on Linux; this is not a multi-OS claim |
 | Scale reliability | 1,000 generated images scanned, indexed, searched, and rerun idempotently | Deterministic extractor stand-ins; not a relevance benchmark |
 | Real-photo retrieval | 15-image local evaluation: 91.7% hit@1, 100% hit@5, 95.8% MRR@5 | Aggregate metrics only; too small for a broad quality claim |
-| CPU containers | Core and full images built locally on arm64 | Linux amd64 and registry publication remain pending |
-| Full-image runtime | CPU-only ML imports, HEIC decoding, and a 15/15 scan from a read-only photo mount | Full Compose/Ollama flow remains pending |
+| CPU containers | Core and full images built locally on arm64; the hosted full image builds and passes non-root/read-only HTTP health on Linux amd64 | GHCR publication remains pending; the hosted job covers the full image |
+| Full-image runtime | Local CPU-only ML imports, HEIC decoding, and a 15/15 read-only scan; hosted service runs non-root with a read-only root filesystem | Hosted health is a service smoke, not a Compose/Ollama or model-quality gate |
 
 No private filenames, OCR text, paths, or image contents are included in these
 reported metrics or in tracked release artifacts.
 
 ## Docker CPU Quick Start
 
-The core and full non-root CPU images build locally on arm64. The full image
-also passes CPU-only ML imports, HEIC decoding, and a 15/15 scan from a
+The core and full non-root CPU images build locally on arm64. The hosted full
+image also builds and passes non-root/read-only HTTP health on Linux amd64;
+locally it passes CPU-only ML imports, HEIC decoding, and a 15/15 scan from a
 read-only photo mount. The complete Compose workflow with Ollama is still a
-preview until its full scan/index/search gate passes on Linux. Review the
-resolved mounts before starting it:
+preview until its full scan/index/search gate passes. Review the resolved
+mounts before starting it:
 
 ```bash
 export PHOTOS_DIR="$HOME/Pictures"
@@ -404,8 +408,11 @@ prevention guarantee.
 - PrivateLens does not provide full-database encryption, encrypted thumbnails,
   access control, multi-user isolation, or a cloud backup service.
 - Video indexing is outside the current v1 scope.
-- Hosted CI, PyPI/GHCR publication, Linux amd64, the full Compose/Ollama flow,
-  and Python 3.12/3.13 hosted execution remain pending for this candidate.
+- PyPI/GHCR publication and the full Compose/Ollama flow remain pending.
+  Hosted checks cover Python 3.11–3.13, an isolated wheel consumer, and the
+  full CPU image's build plus non-root/read-only HTTP-health smoke on Linux
+  amd64; they do not validate bare-metal Linux, a multi-OS matrix, or
+  Compose/Ollama.
 - CUDA, native Windows, and the desktop application are unsupported and are not
   shipped in 1.0.
 - Optional model weights have licenses independent of the PrivateLens code.
