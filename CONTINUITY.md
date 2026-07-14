@@ -72,8 +72,9 @@ Reflect on current working direction is not worth continuing or have better idea
 
 ## 3. Next Stage Implementation Plan — Update after every meaningful session
 
-- Focus 1: Review and publish the completed README/identity polish; local SVG,
-  GitHub Markdown, link, badge, lock, diff, and pre-commit checks pass.
+- Focus 1: Merge README/identity PR #5 after required checks, then verify its
+  hero, badges, and absolute PyPI-safe links on public `main`; all 185 local
+  tests plus SVG, GitHub Markdown, lock, diff, and pre-commit gates pass.
 - Focus 2: With action-time confirmation, submit the prepared PyPI OIDC
   publisher for `kenny2077/PrivateLens`, `release.yml`, environment `pypi`;
   GitHub already enforces a no-bypass, tag-only `v*` deployment boundary.
