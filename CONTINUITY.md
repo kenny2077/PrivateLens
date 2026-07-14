@@ -42,9 +42,9 @@ Code Architecture:
 
 Milestones — Three facts only, no raw logs:
 
-- 1. The canonical repository is public with a noreply-only history; release PR
-  #2 is mergeable after hosted Python 3.11–3.13, isolated-wheel, source,
-  Linux amd64 core/full-container, and Python/Actions CodeQL gates all passed.
+- 1. Release PR #2 is fast-forward merged into public `main` at `4be6a15` with
+  noreply-only history; post-merge Python 3.11–3.13 and Python/Actions CodeQL
+  pass with zero open CodeQL, Dependabot, or secret-scanning alerts.
 - 2. The release-final source and definitive wheel/sdist pass 184 tests from
   both the worktree and extracted sdist, lint/format/typing/bytecode/lock,
   pre-commit, strict metadata, privacy/integrity review, and three independent
@@ -59,8 +59,8 @@ Critical Bugs / Software or Hardware or Network Issues — Three logs maximum:
 - The signed-in PyPI pending-publisher form is prepared with the exact public
   fields but awaits action-time confirmation before Add; no release tag may be
   pushed before registration succeeds.
-- Release commit `c651a50` is hosted in green PR #2 but is not merged, and
-  PyPI/GitHub/GHCR artifacts remain uncreated; GHCR must stay `-core` only.
+- PyPI/GitHub/GHCR artifacts remain uncreated and no release tag exists; GHCR
+  must stay explicitly `-core` only because embedded OCR-model rights are unclear.
 - Full Compose/Ollama remains unverified; CUDA and desktop are unsupported and
   unshipped, and InsightFace weights require separate license review.
 
@@ -76,10 +76,10 @@ Reflect on current working direction is not worth continuing or have better idea
 
 - Focus 1: With action-time confirmation, submit the prepared PyPI OIDC
   publisher for `kenny2077/PrivateLens`, `release.yml`, environment `pypi`.
-- Focus 2: Merge PR #2 through the verified fast-forward path, then create and
-  push the signed-off `v1.0.0` tag only after the publisher exists.
-- Focus 3: Verify PyPI/GitHub/core-GHCR artifacts externally,
-  update release truth, delete temporary branches, and enforce protections.
+- Focus 2: Create and push the signed-off `v1.0.0` tag only after the publisher
+  exists; main protection now enforces admins and requires all six release gates.
+- Focus 3: Verify PyPI/GitHub/core-GHCR artifacts externally, update release
+  truth, protect the release tag, and delete temporary release branches.
 
 ---
 
