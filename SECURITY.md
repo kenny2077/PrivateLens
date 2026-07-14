@@ -6,14 +6,13 @@ exposing the very data the project is designed to keep private.
 
 ## Supported versions
 
-The 1.0.x release line will receive security fixes once published. Before then,
-reports are assessed against the 1.0.0 candidate branch; this policy does not
-claim that a public release already exists.
+The 1.0.x release line and current default branch receive security fixes on a
+best-effort basis.
 
 | Version | Support |
 |---------|---------|
-| 1.0.x, once published | Supported |
-| Current default and 1.0 candidate branches | Supported |
+| 1.0.x | Supported |
+| Current default branch | Supported |
 | Versions older than 1.0 and forks | Not supported |
 
 ## Report a vulnerability privately

@@ -10,7 +10,9 @@ API and web work should not weaken the scan/index/search workflow.
 
 ## Before you start
 
-- Use Python 3.11, 3.12, or 3.13 and `uv`.
+- Use Python 3.11, 3.12, or 3.13 and `uv` for core work. Use Python 3.11 for
+  release-gated ML/full-extra work. The lock resolves on 3.12, but the complete
+  ML stack is not a supported 1.0 gate there; RapidOCR excludes Python 3.13.
 - Search existing issues before proposing a substantial behavior change.
 - Keep patches focused. Discuss large architectural or product-scope changes
   before implementation.
@@ -31,7 +33,7 @@ Install the full local ML stack when working on indexing, extractors, or
 model-dependent search:
 
 ```bash
-uv sync --all-extras
+uv sync --python 3.11 --all-extras
 ```
 
 To print the complete local setup path, including Ollama, model cache warmup, and verification commands:

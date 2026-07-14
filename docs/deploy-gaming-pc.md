@@ -1,7 +1,7 @@
 # Experimental NVIDIA / Gaming-PC Validation Guide
 
 This is an **unsupported future-validation checklist**, not a working
-installation guide. The 1.0.0 release candidate is CPU-only: it ships no CUDA
+installation guide. The 1.0.0 release is CPU-only: it ships no CUDA
 image, Compose file, dependency extra, or helper script, and this page
 intentionally provides no runnable CUDA commands. The desktop application is
 also unsupported and is not shipped in 1.0.
@@ -11,8 +11,9 @@ For the currently exercised container path, use the
 images build locally on arm64; the full image passes CPU-only ML imports, HEIC
 decoding, and a 15/15 scan from a read-only photo mount. The hosted full image
 also builds and passes non-root/read-only HTTP health on Linux amd64. The
-complete CPU Compose + Ollama flow, bare-metal Linux, and every CUDA path remain
-open gates.
+release workflow publishes only the model-free core image because the full
+image's embedded OCR-model redistribution terms are unclear. The complete CPU
+Compose + Ollama flow, bare-metal Linux, and every CUDA path remain open gates.
 
 ## Intended Target
 

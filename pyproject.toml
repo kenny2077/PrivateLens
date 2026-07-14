@@ -61,7 +61,7 @@ ml = [
     "open-clip-torch>=2.24,<4",
     "torch>=2.5,<3",
     "torchvision>=0.20,<1",
-    "rapidocr-onnxruntime>=1.2,<2",
+    "rapidocr-onnxruntime==1.4.4",
     "insightface>=0.7,<2",
     "onnxruntime>=1.20,<2",
 ]
@@ -75,7 +75,7 @@ full = [
     "open-clip-torch>=2.24,<4",
     "torch>=2.5,<3",
     "torchvision>=0.20,<1",
-    "rapidocr-onnxruntime>=1.2,<2",
+    "rapidocr-onnxruntime==1.4.4",
     "insightface>=0.7,<2",
     "onnxruntime>=1.20,<2",
 ]
@@ -118,7 +118,12 @@ norecursedirs = [
 
 [tool.hatch.build.targets.sdist]
 include = [
+    "/.dockerignore",
     "/.env.example",
+    "/.github/ISSUE_TEMPLATE/*.md",
+    "/.github/workflows/*.yml",
+    "/.pre-commit-config.yaml",
+    "/Dockerfile",
     "/privatelens",
     "/tests",
     "/docs/architecture.md",
@@ -137,7 +142,11 @@ include = [
     "/SECURITY.md",
     "/SUPPORT.md",
     "/THIRD_PARTY_MODELS.md",
+    "/THIRD_PARTY_LICENSES/**",
+    "/docker-compose.yml",
     "/pyproject.toml",
+    "/scripts",
+    "/uv.lock",
 ]
 
 [build-system]

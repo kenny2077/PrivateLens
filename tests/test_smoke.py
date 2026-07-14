@@ -1633,6 +1633,7 @@ class TestCli:
 
         assert optional["core"] == []
         assert optional["full"] == optional["ml"]
+        assert optional["full"].count("rapidocr-onnxruntime==1.4.4") == 1
         assert any(dep.startswith("pre-commit>=4.0") for dep in optional["dev"])
         assert any(dep.startswith("mypy>=1.13") for dep in optional["dev"])
         assert not any(dep.startswith(("pytest", "ruff")) for dep in optional["full"])
@@ -1681,6 +1682,58 @@ class TestCli:
         assert "python -m pytest tests/ -v" in Path("CONTRIBUTING.md").read_text()
         assert "repo: local" in Path(".pre-commit-config.yaml").read_text()
         assert "id: ruff\n" in Path(".pre-commit-config.yaml").read_text()
+
+    def test_release_metadata_is_durable_for_pypi(self):
+        readme = Path("README.md").read_text()
+        changelog = Path("CHANGELOG.md").read_text()
+        security = Path("SECURITY.md").read_text()
+
+        assert "release candidate" not in readme.lower()
+        assert "release-candidate" not in readme.lower()
+        assert "not a published release" not in readme.lower()
+        assert "release candidate" not in changelog.lower()
+        assert "candidate branch" not in security.lower()
+        assert "Python 3.11 for the verified `privatelens[full]` stack" in readme
+        assert "model-free `1.0.0-core` image" in readme
+
+        destinations = re.findall(r"\]\(([^)]+)\)", readme)
+        assert destinations
+        assert all(
+            destination.startswith(("https://", "http://", "#")) for destination in destinations
+        )
+
+    def test_release_container_excludes_unclear_model_redistribution(self):
+        dockerfile = Path("Dockerfile").read_text()
+        workflow = Path(".github/workflows/release.yml").read_text()
+        container_workflow = Path(".github/workflows/container.yml").read_text()
+        model_record = Path("THIRD_PARTY_MODELS.md").read_text()
+        rapidocr_license = Path("THIRD_PARTY_LICENSES/RapidOCR-LICENSE.txt").read_text()
+
+        assert "build-args: PRIVATELENS_EXTRAS=core" in workflow
+        assert "build-args: PRIVATELENS_EXTRAS=full" not in workflow
+        assert "suffix=-core" in workflow
+        assert "flavor: latest=false" in workflow
+        assert "labels: ${{ steps.metadata.outputs.labels }}" not in workflow
+        assert "org.opencontainers.image.licenses" not in workflow
+        assert "Publish model-free core image" in workflow
+        assert "Build and verify core release image" in container_workflow
+        assert 'blocked=("open_clip", "torch", "rapidocr_onnxruntime", "insightface")' in (
+            container_workflow
+        )
+        assert "COPY THIRD_PARTY_MODELS.md /licenses/THIRD_PARTY_MODELS.md" in dockerfile
+        assert (
+            "COPY THIRD_PARTY_LICENSES/RapidOCR-LICENSE.txt "
+            "/licenses/RapidOCR-LICENSE.txt" in dockerfile
+        )
+        assert "org.opencontainers.image.licenses" not in dockerfile
+        assert "rapidocr_onnxruntime-1.4.4-py3-none-any.whl" in model_record
+        assert "971d7d5f223a7a808662229df1ef69893809d8457d834e6373d3854bc1782cbf" in (model_record)
+        assert "published GHCR image excludes this dependency" in model_record
+        assert "Copyright (c) 2021 RapidOCR Authors. All rights reserved." in rapidocr_license
+        assert "Copyright (c) 2021 RapidAI. All rights reserved." in rapidocr_license
+        assert "Copyright [yyyy]" not in rapidocr_license
+        assert "Apache License" in rapidocr_license
+        assert "Version 2.0, January 2004" in rapidocr_license
 
     def test_ci_covers_supported_python_and_built_wheel(self):
         workflow = Path(".github/workflows/ci.yml").read_text()

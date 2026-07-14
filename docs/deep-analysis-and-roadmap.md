@@ -14,22 +14,24 @@
 
 ## Current Gate Status — 2026-07-14
 
-PrivateLens is now a `1.0.0` release candidate, not a published release. Local
+PrivateLens `1.0.0` is release-final. Official wheel/sdist, GitHub Release, and
+model-free GHCR artifacts are produced only from the `v1.0.0` tag. Local
 verification on Apple Silicon covers the core product thesis and the original
 roadmap's highest-priority reliability gates:
 
 | Gate | Current evidence | Boundary |
 |------|------------------|----------|
-| Automated and vector correctness | 182 local tests plus lint, typing, bytecode, lock, and diff checks; a 1,001-vector regression covers the BLOB fallback and native-first path; hosted Python 3.11–3.13 and isolated wheel-consumer checks pass | Hosted jobs run on Linux; this is not a multi-OS claim |
+| Automated and vector correctness | 184 local tests plus lint, typing, bytecode, lock, and diff checks; a 1,001-vector regression covers the BLOB fallback and native-first path; hosted Python 3.11–3.13 and isolated wheel-consumer checks pass | Hosted jobs exercise the core across the matrix; the full ML stack is release-gated on Python 3.11 |
 | 1,000-image reliability loop | Deterministic generated images complete scan, index, search, and an idempotent rerun | Uses extractor stand-ins; not a relevance or performance claim |
 | Real-photo retrieval | A 15-image local run reaches 91.7% hit@1, 100% hit@5, and 95.8% MRR@5 | Aggregate metrics only; the sample is too small for a broad quality claim |
-| CPU Docker | Core and full images build locally on arm64; the full image passes local CPU-only ML imports, HEIC decoding, and a 15/15 read-only scan; hosted CI builds it and passes HTTP health on Linux amd64 while running non-root with a read-only root filesystem | GHCR publication and full Compose/Ollama remain pending; hosted health is not a model-quality gate |
+| CPU Docker | Core and full images build locally on arm64; the full image passes local CPU-only ML imports, HEIC decoding, and a 15/15 read-only scan; hosted CI builds it and passes HTTP health on Linux amd64 while running non-root with a read-only root filesystem | GHCR publishes a model-free core image; full-image redistribution and full Compose/Ollama remain open; hosted health is not a model-quality gate |
 
-PyPI/GHCR publication and the complete Compose/Ollama flow remain open gates.
 Hosted Python 3.11–3.13, isolated wheel-consumer, and Linux amd64 full-image
-build/HTTP-health checks pass. CUDA and the desktop application are unsupported
-and are not shipped in 1.0. The historical body below remains the 2026-07-03
-starting-point record rather than a live completion tracker.
+build/HTTP-health checks pass. The published GHCR artifact is core-only because
+the exact license grant for RapidOCR's embedded models is unclear. The complete
+Compose/Ollama flow remains a preview. CUDA and the desktop application are
+unsupported and are not shipped in 1.0. The historical body below remains the
+2026-07-03 starting-point record rather than a live completion tracker.
 
 ## 1. Executive Summary
 

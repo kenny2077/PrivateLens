@@ -46,7 +46,7 @@ Evidence Cards (why each result matched)
 
 | Layer | Technology | Rationale |
 |-------|-----------|-----------|
-| Language | Python 3.11–3.13 | Supported and configured CI range |
+| Language | Core: Python 3.11–3.13; full ML: release-gated on 3.11 | Core CI covers 3.11–3.13; the full stack is verified on 3.11, while locked RapidOCR 1.4.4 excludes 3.13 |
 | CLI | Click | Modern Python CLI |
 | Web API | FastAPI | Async, OpenAPI docs |
 | Database | SQLite + sqlite-vec + FTS5 | Zero-config, single-file |
@@ -112,7 +112,7 @@ features until validated against their upstream versions.
 
 ```bash
 # Setup
-uv sync --all-extras
+uv sync --python 3.11 --all-extras
 source .venv/bin/activate
 
 # Run tests

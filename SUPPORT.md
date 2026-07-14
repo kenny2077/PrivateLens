@@ -75,6 +75,6 @@ Maintainers may not be able to provide:
 - legal advice about biometric processing or model licensing;
 - support for modified forks or old releases;
 - debugging for private datasets that cannot be reproduced synthetically;
-- guarantees for native Windows, unverified Linux/WSL, CUDA, or third-party
+- guarantees for native Windows, unverified bare-metal Linux or WSL, CUDA, or third-party
   service behavior;
 - custom features that import, move, rewrite, or manage original photos.

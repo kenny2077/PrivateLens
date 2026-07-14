@@ -166,7 +166,7 @@ jobs:
           gh release create "$GITHUB_REF_NAME" dist/* "${release_flags[@]}"
 
   publish-container:
-    name: Publish full image to GHCR
+    name: Publish model-free core image to GHCR
     needs: release-github
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -214,19 +214,23 @@ jobs:
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         with:
           images: ${{ steps.image.outputs.name }}
+          flavor: latest=false
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}},enable=${{ !startsWith(github.ref_name, 'v0.') }}
-      - name: Publish full image
+            type=semver,pattern={{version}},suffix=-core
+            type=semver,pattern={{major}}.{{minor}},suffix=-core
+            type=semver,pattern={{major}},suffix=-core,enable=${{ !startsWith(github.ref_name, 'v0.') }}
+      - name: Publish model-free core image
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
-          build-args: PRIVATELENS_EXTRAS=full
+          build-args: PRIVATELENS_EXTRAS=core
           platforms: linux/amd64
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ github.ref_name }}
           cache-from: type=gha,scope=container-release
           cache-to: type=gha,mode=max,scope=container-release
           provenance: mode=max

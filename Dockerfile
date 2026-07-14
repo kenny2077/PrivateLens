@@ -59,6 +59,12 @@ COPY --from=builder /opt/venv /opt/venv
 
 WORKDIR /app
 COPY scripts/ ./scripts/
+COPY LICENSE /licenses/PrivateLens-MIT.txt
+COPY THIRD_PARTY_MODELS.md /licenses/THIRD_PARTY_MODELS.md
+COPY THIRD_PARTY_LICENSES/RapidOCR-LICENSE.txt /licenses/RapidOCR-LICENSE.txt
+
+LABEL org.opencontainers.image.title="PrivateLens" \
+    org.opencontainers.image.description="Local-first, read-only photo search sidecar"
 
 RUN mkdir -p /data /photos /app/.privatelens/models /app/.privatelens/thumbnails \
     && chown -R privatelens:privatelens /data /photos /app

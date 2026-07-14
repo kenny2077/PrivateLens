@@ -1,22 +1,24 @@
 # PrivateLens
 
 [![CI](https://github.com/kenny2077/PrivateLens/actions/workflows/ci.yml/badge.svg)](https://github.com/kenny2077/PrivateLens/actions/workflows/ci.yml)
-[![Python 3.11–3.13](https://img.shields.io/badge/python-3.11%E2%80%933.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/privatelens.svg)](https://pypi.org/project/privatelens/)
+[![Python core 3.11–3.13](https://img.shields.io/badge/python_core-3.11%E2%80%933.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Full ML 3.11](https://img.shields.io/badge/full_ML-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/kenny2077/PrivateLens?style=flat)](https://github.com/kenny2077/PrivateLens/stargazers)
 
 **Local-first, read-only photo search sidecar with AI evidence cards.**
 
 Find your photos by meaning, not by scrolling. PrivateLens indexes your existing photo folders without importing, moving, or managing them, then lets you search with natural language: "my driver license backup", "receipt from Target", "cat on the sofa". Results include evidence for why they matched.
 
-> **Release status:** This branch is the PrivateLens `1.0.0` release candidate,
-> not a published release. Local Apple Silicon gates include 182 tests, a
+> **v1.0 status:** This source is release-final for PrivateLens `1.0.0`.
+> Official PyPI, GitHub Release, and GHCR artifacts are produced only from the
+> `v1.0.0` tag. Local Apple Silicon gates include 184 tests, a
 > 1,000-image reliability run, a 15-image local real-photo evaluation reported
 > only in aggregate, and core/full CPU Docker builds. Hosted checks
 > pass Python 3.11–3.13 and an isolated wheel consumer; the full CPU image also
 > builds and passes HTTP health on Linux amd64 while running non-root with a
-> read-only root filesystem. PyPI/GHCR publication and the full Compose/Ollama
-> flow remain pending.
+> read-only root filesystem. The full Compose/Ollama flow remains a preview.
 > CUDA and the desktop application are unsupported and are not shipped in 1.0.
 
 ## Core Principles
@@ -29,8 +31,11 @@ Find your photos by meaning, not by scrolling. PrivateLens indexes your existing
 
 ## Requirements and platform status
 
-- Python 3.11, 3.12, or 3.13.
-- `uv` for a source checkout, or `pip` for a published release.
+- Python 3.11, 3.12, or 3.13 for the core package.
+- Python 3.11 for the verified `privatelens[full]` stack and CPU container.
+  Its locked RapidOCR runtime also resolves on Python 3.12, but the complete
+  ML stack is not release-gated there in 1.0.
+- `uv` for a source checkout, or `pip` for the PyPI release.
 - Ollama only if you enable optional VLM captioning or reranking.
 - Free disk space for the SQLite sidecar, thumbnails, and model caches. Source
   photos remain in place.
@@ -38,7 +43,7 @@ Find your photos by meaning, not by scrolling. PrivateLens indexes your existing
 | Environment | Status |
 |-------------|--------|
 | macOS on Apple Silicon | Primary development environment; verified locally with memory-conscious settings |
-| CPU Docker image | Core and full images build locally on arm64; the hosted full image builds and passes HTTP health on Linux amd64 while running non-root with a read-only root filesystem |
+| CPU Docker image | Core and full images build locally on arm64; the hosted full image builds and passes HTTP health on Linux amd64 while running non-root with a read-only root filesystem; the release workflow publishes the model-free `1.0.0-core` image |
 | Full Docker Compose + Ollama | Preview; full-stack validation is still pending |
 | Linux x86_64 | Hosted Python 3.11–3.13 and full CPU-container gates pass on Linux; bare-metal installation is not separately validated |
 | Windows WSL2 | Not validated for 1.0 |
@@ -48,13 +53,12 @@ Find your photos by meaning, not by scrolling. PrivateLens indexes your existing
 
 ## Installation
 
-### From a published release
+### From PyPI
 
-Use this path after a PrivateLens release is available from your configured
-Python package index:
+Use Python 3.11 for the complete, release-gated local indexing stack:
 
 ```bash
-python3 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 # Linux CPU-only install: prevent PyPI's CUDA-enabled PyTorch build.
 python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
@@ -65,11 +69,16 @@ On macOS and Windows, omit the separate PyTorch command because their PyPI
 wheels are already CPU-only. The Linux command uses PyTorch's official CPU
 wheel index; PrivateLens 1.0 does not ship a supported CUDA runtime.
 
+On Python 3.12 or 3.13, install `privatelens` without an ML extra. The CLI/API
+core is tested on both versions. The locked OCR runtime excludes Python 3.13,
+and the complete ML stack is not release-gated on Python 3.12 in 1.0.
+
 `privatelens[full]` installs the local CLIP, OCR, and face runtime used to build
 a searchable index. `privatelens` without the extra is the lightweight CLI/API
 core: it can scan folders, inspect an existing sidecar, and run non-ML search
 modes, but it cannot run the normal CLIP/OCR indexing pass. Ollama and its VLM
-weights remain separate. Read [THIRD_PARTY_MODELS.md](THIRD_PARTY_MODELS.md)
+weights remain separate. Read the
+[third-party model record](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/THIRD_PARTY_MODELS.md)
 before enabling face or VLM features.
 
 ### From a source checkout
@@ -81,9 +90,9 @@ uv sync --python 3.11 --extra full
 source .venv/bin/activate
 ```
 
-For development tools as well, run `uv sync --all-extras`. These project
+For development tools as well, run `uv sync --python 3.11 --all-extras`. These project
 commands use the locked CPU-only PyTorch source on Linux. See
-[CONTRIBUTING.md](CONTRIBUTING.md).
+[contribution guide](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/CONTRIBUTING.md).
 
 ## Quick Start
 
@@ -152,7 +161,7 @@ separate `--only-face` / `--only-vlm` passes.
 
 ## 30-Second Terminal Demo
 
-![PrivateLens 30-second synthetic demo](docs/assets/terminal-demo.svg)
+![PrivateLens 30-second synthetic demo](https://raw.githubusercontent.com/kenny2077/PrivateLens/v1.0.0/docs/assets/terminal-demo.svg)
 
 ```bash
 DEMO_DIR=/tmp/privatelens-demo-photos
@@ -176,9 +185,10 @@ are cached. A model-free path-only smoke remains available with
 ## Configuration and local data
 
 PrivateLens uses Pydantic settings and environment variables prefixed with
-`PRIVATELENS_`. Copy [.env.example](.env.example) to `.env` only when you need
-to override a default. `privatelens setup` prints the effective setup path and
-safe remediation commands.
+`PRIVATELENS_`. Copy the
+[example environment file](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/.env.example)
+to `.env` only when you need to override a default. `privatelens setup` prints
+the effective setup path and safe remediation commands.
 
 By default, runtime data stays outside the repository:
 
@@ -237,7 +247,7 @@ privatelens benchmark --json
 | Mean reciprocal rank | 1.000 | Reported |
 | Mean precision@5 | 0.220 | Reported |
 
-The fixture executes real FTS, metadata, face-count, detection, recipe-filter, ranking, and evidence-card code against deterministic signal annotations. It deliberately does not measure CLIP or VLM model quality. The checked-in report is [results/benchmarks/search-quality-v1.json](results/benchmarks/search-quality-v1.json).
+The fixture executes real FTS, metadata, face-count, detection, recipe-filter, ranking, and evidence-card code against deterministic signal annotations. It deliberately does not measure CLIP or VLM model quality. The checked-in report is the [search-quality v1 result](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/results/benchmarks/search-quality-v1.json).
 
 ## Model Quality Benchmark
 
@@ -256,16 +266,16 @@ privatelens benchmark-models --skip-vlm  # CLIP + OCR only
 | VLM document classification | 100% | 100% |
 | VLM caption term recall | 100% | 100% |
 
-This gate generates four inspectable, non-private images for a receipt, driver license, travel screenshot, and whiteboard. It exercises the configured OpenCLIP model, RapidOCR, the real sqlite-vec/FTS retrieval paths, and the local Qwen VLM without reading the user's photo library. It is a reproducible model/integration smoke benchmark, not a broad real-world retrieval claim. The checked-in run is [results/benchmarks/model-quality-v1.json](results/benchmarks/model-quality-v1.json).
+This gate generates four inspectable, non-private images for a receipt, driver license, travel screenshot, and whiteboard. It exercises the configured OpenCLIP model, RapidOCR, the real sqlite-vec/FTS retrieval paths, and the local Qwen VLM without reading the user's photo library. It is a reproducible model/integration smoke benchmark, not a broad real-world retrieval claim. The checked-in run is the [model-quality v1 result](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/results/benchmarks/model-quality-v1.json).
 
-## Release-candidate verification
+## v1.0 verification
 
 | Gate | Result on 2026-07-14 | Boundary |
 |------|----------------------------|----------|
-| Automated suite | 182 local tests plus lint, typing, bytecode, lock, and diff checks; hosted Linux x86_64 jobs pass on Python 3.11–3.13, including an isolated wheel consumer | Hosted jobs run on Linux; this is not a multi-OS claim |
+| Automated suite | 184 local tests plus lint, typing, bytecode, lock, and diff checks; hosted Linux x86_64 jobs pass on Python 3.11–3.13, including an isolated wheel consumer | Hosted jobs exercise the core across the matrix; the full ML stack is release-gated on Python 3.11 |
 | Scale reliability | 1,000 generated images scanned, indexed, searched, and rerun idempotently | Deterministic extractor stand-ins; not a relevance benchmark |
 | Real-photo retrieval | 15-image local evaluation: 91.7% hit@1, 100% hit@5, 95.8% MRR@5 | Aggregate metrics only; too small for a broad quality claim |
-| CPU containers | Core and full images built locally on arm64; the hosted full image builds and passes non-root/read-only HTTP health on Linux amd64 | GHCR publication remains pending; the hosted job covers the full image |
+| CPU containers | Core and full images built locally on arm64; the hosted full image builds and passes non-root/read-only HTTP health on Linux amd64; the tag workflow publishes a model-free core image to GHCR | The complete Compose/Ollama flow remains preview-only; the full image is not redistributed because upstream OCR-model terms are unclear |
 | Full-image runtime | Local CPU-only ML imports, HEIC decoding, and a 15/15 read-only scan; hosted service runs non-root with a read-only root filesystem | Hosted health is a service smoke, not a Compose/Ollama or model-quality gate |
 
 No private filenames, OCR text, paths, or image contents are included in these
@@ -277,7 +287,31 @@ The core and full non-root CPU images build locally on arm64. The hosted full
 image also builds and passes non-root/read-only HTTP health on Linux amd64;
 locally it passes CPU-only ML imports, HEIC decoding, and a 15/15 scan from a
 read-only photo mount. The complete Compose workflow with Ollama is still a
-preview until its full scan/index/search gate passes. Review the resolved
+preview until its full scan/index/search gate passes.
+
+The published `-core` image intentionally excludes ML packages and model files.
+It can scan metadata, inspect an existing sidecar, and run non-ML searches:
+
+```bash
+docker pull ghcr.io/kenny2077/privatelens:1.0.0-core
+docker run --detach --name privatelens \
+  --publish 127.0.0.1:8000:8000 \
+  --read-only --security-opt no-new-privileges:true \
+  --tmpfs /tmp:rw,noexec,nosuid,size=256m \
+  --mount type=bind,src="$HOME/Pictures",dst=/photos,readonly \
+  --mount type=volume,src=privatelens-data,dst=/data \
+  ghcr.io/kenny2077/privatelens:1.0.0-core
+
+docker exec -it privatelens python -m privatelens.cli scan /photos
+docker exec -it privatelens python -m privatelens.cli status --json
+docker exec -it privatelens python -m privatelens.cli search receipt --type path --json
+```
+
+The full image remains build-verified but is not published because the exact
+license grant for RapidOCR's embedded Baidu-copyrighted ONNX models is unclear.
+To build it for local use after reviewing the
+[third-party model record](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/THIRD_PARTY_MODELS.md),
+use the preview Compose stack from a source checkout. Review the resolved
 mounts before starting it:
 
 ```bash
@@ -293,7 +327,7 @@ docker exec -it privatelens python -m privatelens.cli index --skip-face --skip-v
 docker exec -it privatelens python -m privatelens.cli search receipt --json --limit 5
 ```
 
-For a lighter image that can inspect an existing index without ML extractors:
+To reproduce the published model-free image from source:
 
 ```bash
 PRIVATELENS_EXTRAS=core docker compose build privatelens
@@ -309,7 +343,7 @@ PrivateLens 1.0 ships neither CUDA artifacts nor a desktop application. NVIDIA
 acceleration is deferred until it passes an end-to-end gate on the external GPU
 machine; there is no supported CUDA image, Compose file, dependency extra, or
 helper script. Use the verified CPU path above. The
-[gaming-PC guide](docs/deploy-gaming-pc.md) records the future promotion
+[gaming-PC guide](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/docs/deploy-gaming-pc.md) records the future promotion
 checklist without presenting an unverified quick start.
 
 ## Architecture
@@ -388,11 +422,11 @@ host.
 - **Safe maintenance**: `privatelens prune` previews missing-file records; add `--yes` to remove only those index records
 - **Privacy audit**: `privatelens doctor` — verify local-only status
 
-See the [privacy guide](docs/privacy-guide.md) for the threat model and operating
+See the [privacy guide](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/docs/privacy-guide.md) for the threat model and operating
 guidance. Sensitive detection is heuristic; do not treat it as a data-loss
 prevention guarantee.
 
-## Limitations and release-candidate boundaries
+## Limitations and v1.0 boundaries
 
 - The checked-in four-image model benchmark is an integration gate, not a
   broad real-world retrieval claim. The separate 15-image local evaluation is
@@ -408,16 +442,21 @@ prevention guarantee.
 - PrivateLens does not provide full-database encryption, encrypted thumbnails,
   access control, multi-user isolation, or a cloud backup service.
 - Video indexing is outside the current v1 scope.
-- PyPI/GHCR publication and the full Compose/Ollama flow remain pending.
-  Hosted checks cover Python 3.11–3.13, an isolated wheel consumer, and the
-  full CPU image's build plus non-root/read-only HTTP-health smoke on Linux
-  amd64; they do not validate bare-metal Linux, a multi-OS matrix, or
-  Compose/Ollama.
+- The full Compose/Ollama flow remains a preview. Hosted checks cover the core
+  on Python 3.11–3.13, an isolated wheel consumer, and the full CPU image's
+  build plus non-root/read-only HTTP-health smoke on Linux amd64; they do not
+  validate bare-metal Linux, a multi-OS matrix, or Compose/Ollama.
+- The `full` and `ml` extras are release-gated on Python 3.11. Their locked
+  dependencies resolve on Python 3.12, but the complete ML stack is not tested
+  there in 1.0; RapidOCR 1.4.4 excludes Python 3.13.
+- GHCR publishes the model-free `1.0.0-core` image. The full image remains a
+  local build until the exact license grant for RapidOCR's embedded OCR models
+  is clear.
 - CUDA, native Windows, and the desktop application are unsupported and are not
   shipped in 1.0.
 - Optional model weights have licenses independent of the PrivateLens code.
   In particular, the default InsightFace `buffalo_l` weights are not covered
-  by PrivateLens's MIT license. Read [THIRD_PARTY_MODELS.md](THIRD_PARTY_MODELS.md)
+  by PrivateLens's MIT license. Read the [third-party model record](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/THIRD_PARTY_MODELS.md)
   before enabling face recognition.
 
 ## Troubleshooting
@@ -444,46 +483,48 @@ privatelens status --json
 
 When opening a bug report, use synthetic reproduction data and redact absolute
 paths, OCR text, face data, database contents, tokens, and encryption keys. See
-[SUPPORT.md](SUPPORT.md).
+[support policy](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/SUPPORT.md).
 
 ## Documentation
 
-- [Architecture](docs/architecture.md)
-- [Search recipes](docs/search-recipes.md)
-- [Privacy guide](docs/privacy-guide.md)
-- [Unsupported CUDA validation guide](docs/deploy-gaming-pc.md)
-- [Deep analysis and v1.0 roadmap](docs/deep-analysis-and-roadmap.md)
-- [Changelog](CHANGELOG.md)
+- [Architecture](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/docs/architecture.md)
+- [Search recipes](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/docs/search-recipes.md)
+- [Privacy guide](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/docs/privacy-guide.md)
+- [Unsupported CUDA validation guide](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/docs/deploy-gaming-pc.md)
+- [Deep analysis and v1.0 roadmap](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/docs/deep-analysis-and-roadmap.md)
+- [Changelog](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/CHANGELOG.md)
 
 ## Security and responsible use
 
-Report vulnerabilities through the private process in [SECURITY.md](SECURITY.md);
+Report vulnerabilities through the [private security process](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/SECURITY.md);
 never place private photos, OCR text, face embeddings, keys, or unredacted paths
 in a public issue. Face recognition may involve biometric data and additional
 legal or consent requirements in your jurisdiction.
 
 PrivateLens code is MIT-licensed, but model packages and weights retain their
-own terms. Review [THIRD_PARTY_MODELS.md](THIRD_PARTY_MODELS.md) before
+own terms. Review the [third-party model record](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/THIRD_PARTY_MODELS.md) before
 downloading or deploying them, especially for commercial use.
 
 ## Support
 
 PrivateLens is maintained on a best-effort basis with no guaranteed response
-time. Use [SUPPORT.md](SUPPORT.md) to choose between setup help, a reproducible
+time. Use the [support policy](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/SUPPORT.md) to choose between setup help, a reproducible
 bug report, a feature request, and a private security report.
 
 ## Contributing
 
-The core package supports Python 3.11, 3.12, and 3.13. See
-[CHANGELOG.md](CHANGELOG.md) for release status and notable changes.
+The core package supports Python 3.11, 3.12, and 3.13; the full ML extra is
+release-gated on Python 3.11. See the
+[changelog](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/CHANGELOG.md)
+for release status and notable changes.
 
 Contributions are welcome when they preserve the read-only sidecar boundary,
 include proportionate verification, and never add private media to the
-repository. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the
-[Code of Conduct](CODE_OF_CONDUCT.md) before opening a pull request.
+repository. Read the [contribution guide](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/CONTRIBUTING.md) and the
+[Code of Conduct](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/CODE_OF_CONDUCT.md) before opening a pull request.
 
 ## License
 
-PrivateLens source code is available under the [MIT License](LICENSE).
+PrivateLens source code is available under the [MIT License](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/LICENSE).
 Dependencies, services, and model weights are not relicensed by PrivateLens;
-see [THIRD_PARTY_MODELS.md](THIRD_PARTY_MODELS.md).
+see the [third-party model record](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/THIRD_PARTY_MODELS.md).

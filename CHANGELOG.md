@@ -6,11 +6,13 @@ All notable changes to PrivateLens will be documented in this file.
 
 ## [1.0.0] - 2026-07-14
 
-This entry describes the 1.0.0 release candidate. Hosted checks
-now pass Python 3.11–3.13, isolated wheel consumption, and a full CPU image
-build with HTTP health on Linux amd64 while running non-root with a read-only
-root filesystem. PyPI/GHCR publication and the complete Compose/Ollama gate
-remain pending; this changelog does not claim that 1.0.0 has been published.
+PrivateLens 1.0.0 is the first production-stable CLI release. Hosted checks
+pass the core on Python 3.11–3.13, isolated wheel consumption, and a full CPU
+image build with HTTP health on Linux amd64 while running non-root with a
+read-only root filesystem. Official artifacts are produced only from the
+`v1.0.0` tag: wheel/sdist on PyPI and GitHub Releases, plus an explicitly
+model-free `1.0.0-core` image on GHCR. The full Compose/Ollama flow remains a
+preview.
 
 ### Added
 
@@ -22,6 +24,8 @@ remain pending; this changelog does not claim that 1.0.0 has been published.
 - Incremental folder watcher with debounced scan/index cycles and NDJSON events.
 - Python 3.11, 3.12, and 3.13 CI matrix with clean-wheel verification.
 - Official CPU-only PyTorch installation path for Linux users.
+- Model-free GHCR release image with SBOM and provenance; full ML images remain
+  local builds while embedded OCR-model redistribution terms are unclear.
 
 ### Changed
 
@@ -33,7 +37,7 @@ remain pending; this changelog does not claim that 1.0.0 has been published.
 
 ### Verification
 
-- Passed 182 local tests plus lint, typing, bytecode, lock, and diff checks.
+- Passed 184 local tests plus lint, typing, bytecode, lock, and diff checks.
 - Passed a deterministic 1,000-image scan/index/search/idempotence reliability gate.
 - Reached 91.7% hit@1, 100% hit@5, and 95.8% MRR@5 on a 15-image local
   real-photo evaluation; only aggregate metrics are recorded.
@@ -47,3 +51,5 @@ remain pending; this changelog does not claim that 1.0.0 has been published.
 
 - Enforced local-only outbound guards, including the Docker Compose Ollama hostname.
 - Kept source photo mounts read-only and benchmark/demo artifacts free of private media.
+- Recorded exact RapidOCR wheel/model hashes and kept those models out of the
+  published GHCR image pending an unambiguous model-specific license grant.

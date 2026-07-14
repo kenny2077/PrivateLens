@@ -19,11 +19,11 @@ cross-platform compatibility; see the README platform matrix for release status.
 | Privacy audit | Verified locally | `privatelens doctor` inspects local configuration without an internet probe |
 | CPU Docker | Verified locally on arm64 | Core and full images build; the full image uses CPU-only ML runtimes |
 
-## 1.0.0 release-candidate evidence
+## 1.0.0 release evidence
 
 The 2026-07-14 local gate includes:
 
-- 182 passing tests plus lint, typing, bytecode, lock, and diff checks;
+- 184 passing tests plus lint, typing, bytecode, lock, and diff checks;
 - a deterministic 1,000-image scan/index/search/idempotence reliability run;
 - a 15-image local real-photo evaluation at 91.7% hit@1, 100% hit@5, and
   95.8% MRR@5, reported only as aggregate metrics; and
@@ -33,9 +33,10 @@ The 2026-07-14 local gate includes:
 
 Hosted checks pass Python 3.11–3.13 with isolated wheel-consumer
 verification, and the full CPU image builds and passes HTTP health on Linux
-amd64 while running non-root with a read-only root filesystem. PyPI/GHCR
-publication and the full Compose/Ollama flow remain pending. CUDA and the
-desktop application are unsupported and are not shipped in 1.0.
+amd64 while running non-root with a read-only root filesystem. The release
+workflow publishes wheel/sdist artifacts and an explicitly model-free GHCR
+core image from `v1.0.0`; the full Compose/Ollama flow remains a preview. CUDA
+and the desktop application are unsupported and are not shipped in 1.0.
 
 ## Sequential Workflow
 

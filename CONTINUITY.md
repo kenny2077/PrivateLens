@@ -44,21 +44,24 @@ Milestones — Three facts only, no raw logs:
 
 - 1. The canonical repository is public with a noreply-only history; main passes
   hosted Python 3.11–3.13, isolated-wheel, Linux amd64 full-container, and
-  Python/Actions CodeQL gates under protected linear history.
-- 2. Local verification covers 182 tests plus lint/format/typing/bytecode/lock,
-  pre-commit, strict wheel/sdist, isolated consumer, dependency-audit, a
-  1,001-vector regression, and a deterministic 1,000-image reliability gate.
-- 3. Aggregate-only evaluation on 15 local real images reached 91.7% hit@1,
-  100% hit@5, and 95.8% MRR@5; core/full CPU images build on local arm64, and
-  the full image passes CPU-only ML imports, HEIC decoding, and a 15/15 scan
-  from a read-only photo mount.
+  Python/Actions CodeQL gates under protected linear history with zero open
+  CodeQL, Dependabot, or secret-scanning alerts.
+- 2. The release-final source and definitive wheel/sdist pass 184 tests from
+  both the worktree and extracted sdist, lint/format/typing/bytecode/lock,
+  pre-commit, strict metadata, privacy/integrity review, and three independent
+  release audits with no remaining source blocker.
+- 3. Aggregate-only evaluation on 15 local images reached 91.7% hit@1, 100%
+  hit@5, and 95.8% MRR@5; final core/full arm64 images build, the full image
+  imports exact RapidOCR 1.4.4 and scans 15/15 read-only photos, and the core
+  passes non-root/read-only health plus a 100% hit@5 synthetic benchmark.
 
 Critical Bugs / Software or Hardware or Network Issues — Three logs maximum:
 
-- CodeQL found one medium Actions alert because `ci.yml` lacked an explicit
-  read-only token default; the narrow workflow fix and regression test are pending.
-- PyPI/GHCR publication and GitHub release evidence remain pending and must not
-  be claimed as complete.
+- The signed-in PyPI pending-publisher form is prepared with the exact public
+  fields but awaits action-time confirmation before Add; no release tag may be
+  pushed before registration succeeds.
+- The release-final branch is not yet committed, hosted, or merged, and
+  PyPI/GitHub/GHCR artifacts remain uncreated; GHCR must stay `-core` only.
 - Full Compose/Ollama remains unverified; CUDA and desktop are unsupported and
   unshipped, and InsightFace weights require separate license review.
 
@@ -72,12 +75,12 @@ Reflect on current working direction is not worth continuing or have better idea
 
 ## 3. Next Stage Implementation Plan — Update after every meaningful session
 
-- Focus 1: Land the explicit read-only CI token permission, rerun hosted gates,
-  and verify the CodeQL alert closes without suppressing it.
-- Focus 2: Register the exact pending PyPI OIDC publisher and prepare the final
-  release-truth commit without claiming uncreated artifacts.
-- Focus 3: Configure PyPI trusted publishing and repository security/community
-  settings, tag 1.0.0, verify PyPI/GitHub/GHCR publication, and update release truth.
+- Focus 1: Commit and host the release-final branch, pass the new core-image
+  gate and CodeQL, then require that exact context in main protection.
+- Focus 2: With action-time confirmation, submit the prepared PyPI OIDC
+  publisher for `kenny2077/PrivateLens`, `release.yml`, environment `pypi`.
+- Focus 3: Merge, tag 1.0.0, verify PyPI/GitHub/core-GHCR artifacts externally,
+  update release truth, delete temporary branches, and enforce protections.
 
 ---
 
@@ -90,11 +93,12 @@ Files:
 - `README.md`: product positioning, installation, evidence, boundaries, and demo.
 - `pyproject.toml`: package metadata, Python range, dependencies, and build config.
 - `uv.lock`: canonical locked dependency graph and Linux CPU-only Torch source.
-- `CHANGELOG.md`: release-candidate change record.
+- `CHANGELOG.md`: stable 1.0.0 change and verification record.
 - `LICENSE`: canonical MIT license for PrivateLens source.
 - `CONTRIBUTING.md`: contributor workflow and sidecar scope guard.
 - `SECURITY.md` and `SUPPORT.md`: private reporting and community support policy.
-- `THIRD_PARTY_MODELS.md`: model/runtime provenance and license boundaries.
+- `THIRD_PARTY_MODELS.md` and `THIRD_PARTY_LICENSES/`: model provenance,
+  redistribution boundaries, and preserved upstream license text.
 - `.github/workflows/ci.yml`: hosted Python test and wheel-consumer matrix.
 - `.github/workflows/release.yml`: PyPI and GitHub release workflow.
 - `.github/workflows/container.yml`: GHCR CPU image workflow.
@@ -114,7 +118,7 @@ rtk read CONTINUITY.md
 rtk git status --short --branch
 
 # canonical locked setup and validation
-rtk proxy uv sync --locked --all-extras
+rtk proxy uv sync --python 3.11 --locked --all-extras
 rtk proxy uv lock --check
 rtk proxy .venv/bin/python -m pytest
 rtk proxy .venv/bin/python -m ruff check .
