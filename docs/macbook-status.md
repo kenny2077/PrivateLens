@@ -31,7 +31,7 @@ The 2026-07-14 local gate includes:
   CPU-only ML imports, HEIC decoding, and a 15/15 scan from a read-only photo
   mount.
 
-Hosted pull-request checks pass Python 3.11–3.13 with isolated wheel-consumer
+Hosted checks pass Python 3.11–3.13 with isolated wheel-consumer
 verification, and the full CPU image builds and passes HTTP health on Linux
 amd64 while running non-root with a read-only root filesystem. PyPI/GHCR
 publication and the full Compose/Ollama flow remain pending. CUDA and the

@@ -6,7 +6,7 @@ All notable changes to PrivateLens will be documented in this file.
 
 ## [1.0.0] - 2026-07-14
 
-This entry describes the 1.0.0 release candidate. Hosted pull-request checks
+This entry describes the 1.0.0 release candidate. Hosted checks
 now pass Python 3.11–3.13, isolated wheel consumption, and a full CPU image
 build with HTTP health on Linux amd64 while running non-root with a read-only
 root filesystem. PyPI/GHCR publication and the complete Compose/Ollama gate

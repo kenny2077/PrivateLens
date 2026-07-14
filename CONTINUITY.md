@@ -42,9 +42,9 @@ Code Architecture:
 
 Milestones — Three facts only, no raw logs:
 
-- 1. The sanitized release lineage is staged in the private canonical GitHub
-  repository with ready pull request #1; the latest Python 3.11–3.13 and Linux
-  amd64 full-container checks are green.
+- 1. The canonical private repository was rebuilt from four noreply-authored
+  commits; the GitHub-generated personal-email merge is isolated in an archived
+  private staging repository and cannot enter the public history.
 - 2. Local verification covers 181 tests plus lint/format/typing/bytecode/lock,
   pre-commit, strict wheel/sdist, isolated consumer, dependency-audit, a
   1,001-vector regression, and a deterministic 1,000-image reliability gate.
@@ -55,8 +55,8 @@ Milestones — Three facts only, no raw logs:
 
 Critical Bugs / Software or Hardware or Network Issues — Three logs maximum:
 
-- The first hosted run exposed a Linux-only setup assertion and NumPy 2.5 stub
-  mismatch; the surgical fix is now proven by the fully green hosted rerun.
+- The canonical repository still needs its own main-branch Python and manually
+  dispatched full-container checks before its visibility can change.
 - PyPI/GHCR publication and GitHub release evidence remain pending and must not
   be claimed as complete.
 - Full Compose/Ollama remains unverified; CUDA and desktop are unsupported and
@@ -72,10 +72,10 @@ Reflect on current working direction is not worth continuing or have better idea
 
 ## 3. Next Stage Implementation Plan — Update after every meaningful session
 
-- Focus 1: Commit and push the hosted-evidence truth update, then require the
-  refreshed Python and full-container checks to remain green on pull request #1.
-- Focus 2: Merge the hardening branch, configure repository protections and
-  community/security settings, then make the canonical repository public.
+- Focus 1: Push only the audited noreply-authored main lineage to the new
+  canonical repository and rerun Python plus full-container hosted checks.
+- Focus 2: Configure repository protections and community/security settings,
+  verify the public surface again, then make the canonical repository public.
 - Focus 3: Configure PyPI trusted publishing and repository security/community
   settings, tag 1.0.0, verify PyPI/GitHub/GHCR publication, and update release truth.
 

@@ -12,7 +12,7 @@ Find your photos by meaning, not by scrolling. PrivateLens indexes your existing
 > **Release status:** This branch is the PrivateLens `1.0.0` release candidate,
 > not a published release. Local Apple Silicon gates include 181 tests, a
 > 1,000-image reliability run, a 15-image local real-photo evaluation reported
-> only in aggregate, and core/full CPU Docker builds. Hosted pull-request checks
+> only in aggregate, and core/full CPU Docker builds. Hosted checks
 > pass Python 3.11–3.13 and an isolated wheel consumer; the full CPU image also
 > builds and passes HTTP health on Linux amd64 while running non-root with a
 > read-only root filesystem. PyPI/GHCR publication and the full Compose/Ollama
