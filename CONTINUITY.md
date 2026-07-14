@@ -45,14 +45,15 @@ Milestones — Three facts only, no raw logs:
 - 1. Release PR #2 is fast-forward merged into public `main`; canonical history
   is noreply-only, and post-correction Python 3.11–3.13 plus Python/Actions
   CodeQL pass with zero open CodeQL, Dependabot, or secret-scanning alerts.
-- 2. The release-final source and definitive wheel/sdist pass 184 tests from
-  both the worktree and extracted sdist, lint/format/typing/bytecode/lock,
-  pre-commit, strict metadata, privacy/integrity review, and three independent
-  release audits with no remaining source blocker.
+- 2. Release-final source, the locked Python 3.11 full-stack setup, and the
+  definitive wheel/sdist pass 185 tests from both the worktree and extracted
+  sdist, lint/format/typing/bytecode/lock, pre-commit, strict metadata,
+  privacy/integrity review, and independent audits with no source blocker.
 - 3. Aggregate-only evaluation on 15 local images reached 91.7% hit@1, 100%
   hit@5, and 95.8% MRR@5; final core/full arm64 images build, the full image
-  imports exact RapidOCR 1.4.4 and scans 15/15 read-only photos, and the core
-  passes non-root/read-only health plus a 100% hit@5 synthetic benchmark.
+  imports exact RapidOCR 1.4.4 and scans 15/15 read-only photos, the core passes
+  non-root/read-only health plus a 100% hit@5 synthetic benchmark, and both
+  Compose Ollama services use the same pinned image digest.
 
 Critical Bugs / Software or Hardware or Network Issues — Three logs maximum:
 

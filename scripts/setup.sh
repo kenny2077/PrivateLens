@@ -1,35 +1,21 @@
-#!/bin/bash
-# Setup script for PrivateLens
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-echo "Setting up PrivateLens..."
-
-# Check Python version
-python_version=$(python3 --version 2>&1 | awk '{print $2}')
-echo "Python version: $python_version"
-
-# Create virtual environment if it doesn't exist
-if [ ! -d ".venv" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv .venv
+if ! command -v uv >/dev/null 2>&1; then
+    echo "PrivateLens setup requires uv: https://docs.astral.sh/uv/" >&2
+    exit 1
 fi
 
-# Activate virtual environment
-source .venv/bin/activate
+echo "Installing the locked PrivateLens full stack with Python 3.11..."
+uv sync --python 3.11 --locked --extra full
 
-# Install dependencies
-echo "Installing dependencies..."
-pip install -e "."
+mkdir -p "$HOME/.privatelens/thumbnails" "$HOME/.privatelens/models"
 
-# Create data directory
-mkdir -p ~/.privatelens/thumbnails
-mkdir -p ~/.privatelens/models
-
-echo "Setup complete!"
 echo ""
-echo "Next steps:"
-echo "  1. Scan a folder:  privatelens scan ~/Pictures"
-echo "  2. Index photos:   privatelens index"
-echo "  3. Search:         privatelens search 'driver license'"
-echo "  4. Web UI:         privatelens serve"
+echo "Setup complete. Next steps:"
+echo "  1. Activate:        source .venv/bin/activate"
+echo "  2. Inspect setup:   privatelens setup"
+echo "  3. Scan a folder:   privatelens scan ~/Pictures"
+echo "  4. Index photos:    privatelens index --skip-face --skip-vlm --batch-size 1"
+echo "  5. Search:          privatelens search 'driver license'"

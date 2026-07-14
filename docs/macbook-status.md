@@ -23,7 +23,7 @@ cross-platform compatibility; see the README platform matrix for release status.
 
 The 2026-07-14 local gate includes:
 
-- 184 passing tests plus lint, typing, bytecode, lock, and diff checks;
+- 185 passing tests plus lint, typing, bytecode, lock, and diff checks;
 - a deterministic 1,000-image scan/index/search/idempotence reliability run;
 - a 15-image local real-photo evaluation at 91.7% hit@1, 100% hit@5, and
   95.8% MRR@5, reported only as aggregate metrics; and

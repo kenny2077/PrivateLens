@@ -13,7 +13,7 @@ Find your photos by meaning, not by scrolling. PrivateLens indexes your existing
 
 > **v1.0 status:** This source is release-final for PrivateLens `1.0.0`.
 > Official PyPI, GitHub Release, and GHCR artifacts are produced only from the
-> `v1.0.0` tag. Local Apple Silicon gates include 184 tests, a
+> `v1.0.0` tag. Local Apple Silicon gates include 185 tests, a
 > 1,000-image reliability run, a 15-image local real-photo evaluation reported
 > only in aggregate, and core/full CPU Docker builds. Hosted checks
 > pass Python 3.11–3.13 and an isolated wheel consumer; the full CPU image also
@@ -86,11 +86,11 @@ before enabling face or VLM features.
 Run these commands from the repository root:
 
 ```bash
-uv sync --python 3.11 --extra full
+uv sync --python 3.11 --locked --extra full
 source .venv/bin/activate
 ```
 
-For development tools as well, run `uv sync --python 3.11 --all-extras`. These project
+For development tools as well, run `uv sync --python 3.11 --locked --all-extras`. These project
 commands use the locked CPU-only PyTorch source on Linux. See
 [contribution guide](https://github.com/kenny2077/PrivateLens/blob/v1.0.0/CONTRIBUTING.md).
 
@@ -272,7 +272,7 @@ This gate generates four inspectable, non-private images for a receipt, driver l
 
 | Gate | Result on 2026-07-14 | Boundary |
 |------|----------------------------|----------|
-| Automated suite | 184 local tests plus lint, typing, bytecode, lock, and diff checks; hosted Linux x86_64 jobs pass on Python 3.11–3.13, including an isolated wheel consumer | Hosted jobs exercise the core across the matrix; the full ML stack is release-gated on Python 3.11 |
+| Automated suite | 185 local tests plus lint, typing, bytecode, lock, and diff checks; hosted Linux x86_64 jobs pass on Python 3.11–3.13, including an isolated wheel consumer | Hosted jobs exercise the core across the matrix; the full ML stack is release-gated on Python 3.11 |
 | Scale reliability | 1,000 generated images scanned, indexed, searched, and rerun idempotently | Deterministic extractor stand-ins; not a relevance benchmark |
 | Real-photo retrieval | 15-image local evaluation: 91.7% hit@1, 100% hit@5, 95.8% MRR@5 | Aggregate metrics only; too small for a broad quality claim |
 | CPU containers | Core and full images built locally on arm64; the hosted full image builds and passes non-root/read-only HTTP health on Linux amd64; the tag workflow publishes a model-free core image to GHCR | The complete Compose/Ollama flow remains preview-only; the full image is not redistributed because upstream OCR-model terms are unclear |

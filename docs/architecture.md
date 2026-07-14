@@ -112,7 +112,7 @@ features until validated against their upstream versions.
 
 ```bash
 # Setup
-uv sync --python 3.11 --all-extras
+uv sync --python 3.11 --locked --all-extras
 source .venv/bin/activate
 
 # Run tests

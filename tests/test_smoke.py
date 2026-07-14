@@ -2030,10 +2030,11 @@ class TestCli:
         assert "PRIVATELENS_DATA_DIR=/data" in dockerfile
         assert "PRIVATELENS_OLLAMA_URL=http://ollama:11434" in compose
         assert "${PHOTOS_DIR:-./photo}:/photos:ro" in compose
-        assert (
+        pinned_ollama_image = (
             "ollama/ollama:0.31.1@sha256:"
-            "f1a705f2bd113fb8d15f85f7c217f0dc5f6bebda6b0cc42b82c3ad165ffcb9dc" in compose
+            "f1a705f2bd113fb8d15f85f7c217f0dc5f6bebda6b0cc42b82c3ad165ffcb9dc"
         )
+        assert compose.count(pinned_ollama_image) == 2
         assert "ollama-pull:" in compose
         assert "condition: service_healthy" in compose
         assert "condition: service_completed_successfully" in compose
@@ -2060,6 +2061,14 @@ class TestCli:
                 "explicit": True,
             }
         ]
+
+    def test_shipped_setup_script_installs_verified_full_stack(self):
+        setup_script = Path("scripts/setup.sh").read_text()
+
+        assert "set -euo pipefail" in setup_script
+        assert "uv sync --python 3.11 --locked --extra full" in setup_script
+        assert 'pip install -e "."' not in setup_script
+        assert "source .venv/bin/activate" in setup_script
 
     def test_github_actions_are_pinned_to_commit_shas(self):
         action_ref = re.compile(r"^[^\s@]+@[0-9a-f]{40}$")
