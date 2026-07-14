@@ -10,7 +10,7 @@
 Find your photos by meaning, not by scrolling. PrivateLens indexes your existing photo folders without importing, moving, or managing them, then lets you search with natural language: "my driver license backup", "receipt from Target", "cat on the sofa". Results include evidence for why they matched.
 
 > **Release status:** This branch is the PrivateLens `1.0.0` release candidate,
-> not a published release. Local Apple Silicon gates include 181 tests, a
+> not a published release. Local Apple Silicon gates include 182 tests, a
 > 1,000-image reliability run, a 15-image local real-photo evaluation reported
 > only in aggregate, and core/full CPU Docker builds. Hosted checks
 > pass Python 3.11–3.13 and an isolated wheel consumer; the full CPU image also
@@ -262,7 +262,7 @@ This gate generates four inspectable, non-private images for a receipt, driver l
 
 | Gate | Result on 2026-07-14 | Boundary |
 |------|----------------------------|----------|
-| Automated suite | 181 local tests plus lint, typing, bytecode, lock, and diff checks; hosted Linux x86_64 jobs pass on Python 3.11–3.13, including an isolated wheel consumer | Hosted jobs run on Linux; this is not a multi-OS claim |
+| Automated suite | 182 local tests plus lint, typing, bytecode, lock, and diff checks; hosted Linux x86_64 jobs pass on Python 3.11–3.13, including an isolated wheel consumer | Hosted jobs run on Linux; this is not a multi-OS claim |
 | Scale reliability | 1,000 generated images scanned, indexed, searched, and rerun idempotently | Deterministic extractor stand-ins; not a relevance benchmark |
 | Real-photo retrieval | 15-image local evaluation: 91.7% hit@1, 100% hit@5, 95.8% MRR@5 | Aggregate metrics only; too small for a broad quality claim |
 | CPU containers | Core and full images built locally on arm64; the hosted full image builds and passes non-root/read-only HTTP health on Linux amd64 | GHCR publication remains pending; the hosted job covers the full image |

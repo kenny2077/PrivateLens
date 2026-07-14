@@ -2021,6 +2021,13 @@ class TestCli:
                     f"Unpinned action in {workflow}: {reference}"
                 )
 
+    def test_github_actions_default_to_read_only_contents(self):
+        for workflow in Path(".github/workflows").glob("*.yml"):
+            contents = workflow.read_text()
+            assert "\npermissions:\n  contents: read\n" in contents, (
+                f"Missing read-only default permissions in {workflow}"
+            )
+
     def test_pytest_collection_is_limited_to_project_tests(self):
         pyproject = tomllib.loads(Path("pyproject.toml").read_text())
         pytest_options = pyproject["tool"]["pytest"]["ini_options"]

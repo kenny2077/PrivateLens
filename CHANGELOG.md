@@ -33,7 +33,7 @@ remain pending; this changelog does not claim that 1.0.0 has been published.
 
 ### Verification
 
-- Passed 181 local tests plus lint, typing, bytecode, lock, and diff checks.
+- Passed 182 local tests plus lint, typing, bytecode, lock, and diff checks.
 - Passed a deterministic 1,000-image scan/index/search/idempotence reliability gate.
 - Reached 91.7% hit@1, 100% hit@5, and 95.8% MRR@5 on a 15-image local
   real-photo evaluation; only aggregate metrics are recorded.
