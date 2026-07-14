@@ -42,15 +42,16 @@ Code Architecture:
 
 Milestones — Three facts only, no raw logs:
 
-- 1. Release PR #2 is fast-forward merged into public `main`; canonical history
-  is noreply-only, and post-correction Python 3.11–3.13 plus Python/Actions
-  CodeQL pass with zero open CodeQL, Dependabot, or secret-scanning alerts.
+- 1. Release PR #2 and product-page PR #5 are merged into public `main`;
+  canonical history is noreply-only, and post-merge Python 3.11–3.13 plus
+  Python/Actions CodeQL pass with no known source security alert blocker.
 - 2. Release-final source and the locked Python 3.11 full stack pass 185 tests,
   package/container gates, and independent audits; aggregate-only evaluation
   reached 91.7% hit@1, 100% hit@5, and 95.8% MRR@5 on 15 local images.
-- 3. The GitHub landing page now has an original protected-lens identity, a
+- 3. Public `main` now serves the original protected-lens identity, a
   product-first hero/fast-setup/search flow, a visually aligned terminal demo,
-  and the complete release, benchmark, privacy, and architecture record below.
+  and the complete technical record; PR #5 passed Python, CodeQL, and core/full
+  container gates after restoring PyPI-safe links and README contracts.
 
 Critical Bugs / Software or Hardware or Network Issues — Three logs maximum:
 
@@ -72,14 +73,13 @@ Reflect on current working direction is not worth continuing or have better idea
 
 ## 3. Next Stage Implementation Plan — Update after every meaningful session
 
-- Focus 1: Merge README/identity PR #5 after required checks, then verify its
-  hero, badges, and absolute PyPI-safe links on public `main`; all 185 local
-  tests plus SVG, GitHub Markdown, lock, diff, and pre-commit gates pass.
-- Focus 2: With action-time confirmation, submit the prepared PyPI OIDC
+- Focus 1: With action-time confirmation, submit the prepared PyPI OIDC
   publisher for `kenny2077/PrivateLens`, `release.yml`, environment `pypi`;
   GitHub already enforces a no-bypass, tag-only `v*` deployment boundary.
-- Focus 3: Create and push the signed-off `v1.0.0` tag only after the publisher
+- Focus 2: Create and push the signed-off `v1.0.0` tag only after the publisher
   exists; main protection now enforces admins and requires all six release gates.
+- Focus 3: Verify PyPI, GitHub Release, and core GHCR artifacts externally,
+  protect the release tag, and update release truth only after all checks pass.
 
 ---
 
