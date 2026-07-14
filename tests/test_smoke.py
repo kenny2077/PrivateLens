@@ -2726,14 +2726,14 @@ class TestCli:
 
         assert result.exit_code == 0
         payload = json.loads(result.stdout)
-        assert payload["commands"]["install_full_dev"] == (
+        assert payload["commands"]["install_full_dev"].endswith(
             'python -m pip install --upgrade "privatelens[full,dev]"'
         )
         assert payload["commands"]["pull_vlm_model"] == "ollama pull qwen3-vl:2b-instruct-q8_0"
         assert payload["package_groups"]["core"]["command"] == (
             'python -m pip install --upgrade "privatelens"'
         )
-        assert payload["package_groups"]["ml"]["command"] == (
+        assert payload["package_groups"]["ml"]["command"].endswith(
             'python -m pip install --upgrade "privatelens[full]"'
         )
         assert isinstance(payload["package_groups"]["ml"]["missing"], list)

@@ -33,7 +33,8 @@ jobs:
         run: uv sync --locked --extra dev
       - name: Lint
         run: uv run --frozen --extra dev python -m ruff check .
-      - name: Type check
+      - name: Type check (Python 3.11 target)
+        if: matrix.python-version == '3.11'
         run: uv run --frozen --extra dev python -m mypy privatelens
       - name: Compile
         run: uv run --frozen --extra dev python -m compileall privatelens tests

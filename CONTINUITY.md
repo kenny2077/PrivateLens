@@ -42,9 +42,9 @@ Code Architecture:
 
 Milestones — Three facts only, no raw logs:
 
-- 1. The `1.0.0` release-candidate branch preserves the canonical CLI-first,
-  read-only, explainable sidecar thesis and has mature installation, privacy,
-  security, support, contribution, licensing, CI, and release documentation.
+- 1. The sanitized two-commit lineage is staged in the private canonical GitHub
+  repository with ready pull request #1; only `main` and
+  `codex/v1-hardening` were pushed.
 - 2. Local verification covers 181 tests plus lint/format/typing/bytecode/lock,
   pre-commit, strict wheel/sdist, isolated consumer, dependency-audit, a
   1,001-vector regression, and a deterministic 1,000-image reliability gate.
@@ -55,10 +55,11 @@ Milestones — Three facts only, no raw logs:
 
 Critical Bugs / Software or Hardware or Network Issues — Three logs maximum:
 
-- The pre-public development history contains workstation paths and a personal
-  commit email; publish only a new clean root plus the final release commit.
-- Hosted CI, PyPI/GHCR publication, GitHub release evidence, and Linux amd64
-  execution remain pending and must not be claimed as complete.
+- The first hosted run exposed a Linux-only setup assertion and NumPy 2.5 stub
+  mismatch; the surgical test/workflow fix passes all 181 local tests, but its
+  hosted rerun remains pending.
+- PyPI/GHCR publication, GitHub release evidence, and successful Linux amd64
+  container execution remain pending and must not be claimed as complete.
 - Full Compose/Ollama remains unverified; CUDA and desktop are unsupported and
   unshipped, and InsightFace weights require separate license review.
 
@@ -72,10 +73,10 @@ Reflect on current working direction is not worth continuing or have better idea
 
 ## 3. Next Stage Implementation Plan — Update after every meaningful session
 
-- Focus 1: Stage the verified release tree, scan it for private material, and
-  replace the local development history with a two-commit clean public lineage.
-- Focus 2: Create the canonical GitHub repository privately, push main and the
-  hardening branch, require hosted Python/container CI, merge, then make it public.
+- Focus 1: Commit and push the narrow hosted-CI portability fix, then require
+  green Python 3.11–3.13 and Linux amd64 container checks on pull request #1.
+- Focus 2: Update release truth from hosted evidence, merge the hardening branch,
+  configure repository protections/community settings, then make it public.
 - Focus 3: Configure PyPI trusted publishing and repository security/community
   settings, tag 1.0.0, verify PyPI/GitHub/GHCR publication, and update release truth.
 
