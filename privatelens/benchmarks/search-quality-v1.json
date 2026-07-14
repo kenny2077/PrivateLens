@@ -1,0 +1,219 @@
+{
+  "benchmark": "privatelens-search-quality-v1",
+  "version": 1,
+  "top_k": 5,
+  "minimum_hit_rate_at_5": 0.8,
+  "assets": [
+    {
+      "path": "/benchmark/id/driver-license.jpg",
+      "media_type": "document",
+      "width": 1400,
+      "height": 900,
+      "is_sensitive": true,
+      "exif_datetime": "2024-01-15T12:00:00",
+      "ocr": ["DRIVER LICENSE IDENTIFICATION"],
+      "detections": [
+        {"label": "id_card", "confidence": 0.98},
+        {"label": "document", "confidence": 0.95}
+      ],
+      "faces": 0
+    },
+    {
+      "path": "/benchmark/social/selfie-one-person.jpg",
+      "media_type": "image",
+      "width": 700,
+      "height": 1000,
+      "is_sensitive": false,
+      "exif_datetime": "2024-02-01T12:00:00",
+      "ocr": [],
+      "detections": [],
+      "faces": 1
+    },
+    {
+      "path": "/benchmark/social/two-friends.jpg",
+      "media_type": "image",
+      "width": 1200,
+      "height": 900,
+      "is_sensitive": false,
+      "exif_datetime": "2024-03-01T12:00:00",
+      "ocr": [],
+      "detections": [],
+      "faces": 2
+    },
+    {
+      "path": "/benchmark/screenshots/travel-messages.png",
+      "media_type": "screenshot",
+      "width": 1170,
+      "height": 2532,
+      "is_sensitive": false,
+      "exif_datetime": "2024-04-01T12:00:00",
+      "ocr": ["SCREENSHOT MESSAGES BOARDING PASS"],
+      "detections": [],
+      "faces": 0
+    },
+    {
+      "path": "/benchmark/finance/target-receipt.jpg",
+      "media_type": "document",
+      "width": 800,
+      "height": 1200,
+      "is_sensitive": false,
+      "exif_datetime": "2024-05-01T12:00:00",
+      "ocr": ["TARGET RECEIPT TOTAL TAX PAYMENT"],
+      "detections": [
+        {"label": "receipt", "confidence": 0.99}
+      ],
+      "faces": 0
+    },
+    {
+      "path": "/benchmark/pets/dog-at-park.jpg",
+      "media_type": "image",
+      "width": 1200,
+      "height": 900,
+      "is_sensitive": false,
+      "exif_datetime": "2024-06-01T12:00:00",
+      "ocr": [],
+      "detections": [
+        {"label": "dog", "confidence": 0.97}
+      ],
+      "faces": 0
+    },
+    {
+      "path": "/benchmark/documents/project-whiteboard.jpg",
+      "media_type": "document",
+      "width": 1400,
+      "height": 1000,
+      "is_sensitive": false,
+      "exif_datetime": "2024-07-01T12:00:00",
+      "ocr": ["WHITEBOARD PROJECT NOTES"],
+      "detections": [
+        {"label": "whiteboard", "confidence": 0.98},
+        {"label": "document", "confidence": 0.96},
+        {"label": "text", "confidence": 0.94}
+      ],
+      "faces": 0
+    },
+    {
+      "path": "/benchmark/vehicles/car-dashboard.jpg",
+      "media_type": "image",
+      "width": 1600,
+      "height": 900,
+      "is_sensitive": false,
+      "exif_datetime": "2024-08-01T12:00:00",
+      "ocr": ["DASHBOARD LICENSE PLATE"],
+      "detections": [
+        {"label": "car", "confidence": 0.99},
+        {"label": "vehicle", "confidence": 0.96}
+      ],
+      "faces": 0
+    },
+    {
+      "path": "/benchmark/sensitive/medical-record.jpg",
+      "media_type": "document",
+      "width": 1200,
+      "height": 1600,
+      "is_sensitive": true,
+      "exif_datetime": "2024-09-01T12:00:00",
+      "ocr": ["MEDICAL PATIENT RECORD SSN"],
+      "detections": [],
+      "faces": 0
+    },
+    {
+      "path": "/benchmark/memories/family-reunion-2025.jpg",
+      "media_type": "image",
+      "width": 1600,
+      "height": 1000,
+      "is_sensitive": false,
+      "exif_datetime": "2025-07-04T12:00:00",
+      "ocr": ["FAMILY REUNION 2025"],
+      "detections": [],
+      "faces": 0
+    },
+    {
+      "path": "/benchmark/distractors/mountain-landscape.jpg",
+      "media_type": "image",
+      "width": 1600,
+      "height": 900,
+      "is_sensitive": false,
+      "exif_datetime": "2023-01-01T12:00:00",
+      "ocr": ["MOUNTAIN VIEW"],
+      "detections": [],
+      "faces": 0
+    },
+    {
+      "path": "/benchmark/distractors/group-photo.jpg",
+      "media_type": "group_photo",
+      "width": 1600,
+      "height": 1000,
+      "is_sensitive": false,
+      "exif_datetime": "2024-10-01T12:00:00",
+      "ocr": [],
+      "detections": [],
+      "faces": 3
+    }
+  ],
+  "cases": [
+    {
+      "name": "government-id",
+      "recipe": "find_id_photo",
+      "query": "driver license",
+      "relevant_paths": ["/benchmark/id/driver-license.jpg"]
+    },
+    {
+      "name": "single-person-selfie",
+      "recipe": "find_selfie",
+      "query": "selfie",
+      "relevant_paths": ["/benchmark/social/selfie-one-person.jpg"]
+    },
+    {
+      "name": "two-person-photo",
+      "recipe": "find_two_person",
+      "query": "two people",
+      "relevant_paths": ["/benchmark/social/two-friends.jpg"]
+    },
+    {
+      "name": "phone-screenshot",
+      "recipe": "find_screenshot",
+      "query": "screenshot messages",
+      "relevant_paths": ["/benchmark/screenshots/travel-messages.png"]
+    },
+    {
+      "name": "store-receipt",
+      "recipe": "find_receipt",
+      "query": "Target receipt",
+      "relevant_paths": ["/benchmark/finance/target-receipt.jpg"]
+    },
+    {
+      "name": "pet-photo",
+      "recipe": "find_pet",
+      "query": "my dog",
+      "relevant_paths": ["/benchmark/pets/dog-at-park.jpg"]
+    },
+    {
+      "name": "whiteboard-document",
+      "recipe": "find_document",
+      "query": "whiteboard notes",
+      "relevant_paths": ["/benchmark/documents/project-whiteboard.jpg"]
+    },
+    {
+      "name": "car-photo",
+      "recipe": "find_car",
+      "query": "car dashboard",
+      "relevant_paths": ["/benchmark/vehicles/car-dashboard.jpg"]
+    },
+    {
+      "name": "sensitive-documents",
+      "recipe": "find_sensitive",
+      "query": "medical sensitive documents",
+      "relevant_paths": [
+        "/benchmark/id/driver-license.jpg",
+        "/benchmark/sensitive/medical-record.jpg"
+      ]
+    },
+    {
+      "name": "dated-memory",
+      "recipe": "find_memory",
+      "query": "family reunion 2025",
+      "relevant_paths": ["/benchmark/memories/family-reunion-2025.jpg"]
+    }
+  ]
+}

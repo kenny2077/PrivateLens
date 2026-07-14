@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Setup and usage question
+    url: https://github.com/kenny2077/PrivateLens/discussions
+    about: Ask non-sensitive questions in GitHub Discussions after reviewing the README and support guide.
+  - name: Security vulnerability
+    url: https://github.com/kenny2077/PrivateLens/security/advisories/new
+    about: Report privately. Never place vulnerability details or sensitive data in a public issue.

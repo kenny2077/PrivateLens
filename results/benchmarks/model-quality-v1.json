@@ -1,0 +1,206 @@
+{
+  "benchmark": "privatelens-model-quality-v1",
+  "version": 1,
+  "mode": "generated-inspectable-corpus",
+  "corpus": {
+    "source": "privatelens.demo",
+    "asset_count": 4,
+    "contains_private_media": false
+  },
+  "models": {
+    "clip": "openclip:ViT-B-32-quickgelu:openai",
+    "ocr": "rapidocr-onnxruntime:1.4.4",
+    "vlm": "qwen3-vl:2b-instruct-q8_0"
+  },
+  "runtime": {
+    "python": "3.11.15",
+    "system": "Darwin",
+    "machine": "arm64",
+    "sqlite": "3.53.1",
+    "sqlite_vec": "0.1.9",
+    "vector_backend": "sqlite-vec:v0.1.9",
+    "vlm_available": true
+  },
+  "summary": {
+    "case_count": 4,
+    "clip_top1_rate": 1.0,
+    "ocr_top1_rate": 1.0,
+    "vlm_classification_accuracy": 1.0,
+    "vlm_caption_term_recall": 1.0,
+    "minimum_clip_top1_rate": 1.0,
+    "minimum_ocr_top1_rate": 1.0,
+    "minimum_vlm_classification_accuracy": 1.0,
+    "minimum_vlm_caption_term_recall": 1.0,
+    "vlm_required": true,
+    "passed": true
+  },
+  "timings_ms": {
+    "clip": 7419.494,
+    "ocr": 2116.08,
+    "retrieval": 8.52,
+    "vlm": 22720.065,
+    "total": 32567.376
+  },
+  "cases": [
+    {
+      "name": "receipt",
+      "filename": "target-receipt-lunch.jpg",
+      "clip": {
+        "query": "a photo of a store receipt",
+        "first_relevant_rank": 1,
+        "top_1": true,
+        "ranked_filenames": [
+          "target-receipt-lunch.jpg",
+          "phone-screenshot-travel.png",
+          "driver-license-backup.jpg",
+          "whiteboard-notes-project.jpg"
+        ]
+      },
+      "ocr": {
+        "query": "payment visa",
+        "first_relevant_rank": 1,
+        "top_1": true,
+        "ranked_filenames": [
+          "target-receipt-lunch.jpg"
+        ],
+        "text": "TARGETRECEIPT Store:TargetDowntown Date:2026-02-14 Lunch supplies Subtotal 21.48 Tax 1.72 TOTAL 23.20 Payment:ViSA SyntheticPrivateLens demo image.Not areal document."
+      },
+      "vlm": {
+        "expected_type": "receipt",
+        "predicted_type": "receipt",
+        "classification_correct": true,
+        "caption_terms": [
+          "receipt",
+          "total"
+        ],
+        "matched_caption_terms": [
+          "receipt",
+          "total"
+        ],
+        "caption_term_recall": 1.0,
+        "caption": "This is a digital receipt from Target, presented as a synthetic demo image.\n\n- **Document Type:** Receipt\n- **Store:** Target Downtown\n- **Date:** 2026-02-14\n- **Item:** Lunch supplies\n- **Subtotal:** $21.48\n- **Tax:** $1.72\n- **Total:** $23.20\n- **Payment Method:** Visa\n\nThe receipt is marked as a \"Synthetic PrivateLens demo image. Not a real document.\""
+      },
+      "errors": {}
+    },
+    {
+      "name": "driver-license",
+      "filename": "driver-license-backup.jpg",
+      "clip": {
+        "query": "a driver's license identity card",
+        "first_relevant_rank": 1,
+        "top_1": true,
+        "ranked_filenames": [
+          "driver-license-backup.jpg",
+          "phone-screenshot-travel.png",
+          "whiteboard-notes-project.jpg",
+          "target-receipt-lunch.jpg"
+        ]
+      },
+      "ocr": {
+        "query": "sample user",
+        "first_relevant_rank": 1,
+        "top_1": true,
+        "ranked_filenames": [
+          "driver-license-backup.jpg"
+        ],
+        "text": "DRIVERLICENSE STATEOFDEMO Name:SAMPLEUSER License No:Doo00000 DOB:1990-01-01 Expires:2030-01-01 SyntheticPrivateLens demo image.Notareal document."
+      },
+      "vlm": {
+        "expected_type": "id_card",
+        "predicted_type": "id_card",
+        "classification_correct": true,
+        "caption_terms": [
+          "driver",
+          "license"
+        ],
+        "matched_caption_terms": [
+          "driver",
+          "license"
+        ],
+        "caption_term_recall": 1.0,
+        "caption": "This image displays a digital driver's license template for a demonstration purpose.\n\n- **Document Type:** Driver License\n- **State of Demo:** The state is explicitly labeled as \"STATE OF DEMO\".\n- **Name:** The name listed on the document is \"SAMPLE USER\".\n- **License Number:** The license number is \"D0000000\".\n- **Date of Birth (DOB):** The date of birth is \"1990-01-01\".\n- **Expiration Date:** The license expires on \"2030-01-01\".\n- **Additional Information:** At the bottom, it states: \"Synthetic PrivateLens demo image. Not a real document.\" This indicates that the image is a sample created for demonstration and not an actual government-issued document.\n\nThe overall design is simple and clean with a blue header bar at the top and a light blue background. The text is black and clearly legible, formatted in a standard document layout."
+      },
+      "errors": {}
+    },
+    {
+      "name": "travel-screenshot",
+      "filename": "phone-screenshot-travel.png",
+      "clip": {
+        "query": "a mobile phone chat screenshot",
+        "first_relevant_rank": 1,
+        "top_1": true,
+        "ranked_filenames": [
+          "phone-screenshot-travel.png",
+          "target-receipt-lunch.jpg",
+          "whiteboard-notes-project.jpg",
+          "driver-license-backup.jpg"
+        ]
+      },
+      "ocr": {
+        "query": "boarding pass",
+        "first_relevant_rank": 1,
+        "top_1": true,
+        "ranked_filenames": [
+          "phone-screenshot-travel.png"
+        ],
+        "text": "TRAVEL CHAT SCREENSHOT Messages Boarding pass is saved Hotel confirmation: Friday Screenshot captured at 09:41 Synthetic PrivateLens demo image. Not a real document."
+      },
+      "vlm": {
+        "expected_type": "screenshot",
+        "predicted_type": "screenshot",
+        "classification_correct": true,
+        "caption_terms": [
+          "screenshot",
+          "boarding"
+        ],
+        "matched_caption_terms": [
+          "screenshot",
+          "boarding"
+        ],
+        "caption_term_recall": 1.0,
+        "caption": "This is a screenshot of a digital message interface titled \"TRAVEL CHAT SCREENSHOT\". The content shows three lines of text under the \"Messages\" heading:\n- Boarding pass is saved\n- Hotel confirmation: Friday\n- Screenshot captured at 09:41\n\nAt the bottom, there's a disclaimer: \"Synthetic PrivateLens demo image. Not a real document.\" This indicates it is a mock-up or demonstration image from a software called PrivateLens, not an actual photograph of a travel chat conversation. The overall appearance suggests a digital interface for managing travel plans and documents."
+      },
+      "errors": {}
+    },
+    {
+      "name": "whiteboard-notes",
+      "filename": "whiteboard-notes-project.jpg",
+      "clip": {
+        "query": "project planning notes on a whiteboard",
+        "first_relevant_rank": 1,
+        "top_1": true,
+        "ranked_filenames": [
+          "whiteboard-notes-project.jpg",
+          "target-receipt-lunch.jpg",
+          "phone-screenshot-travel.png",
+          "driver-license-backup.jpg"
+        ]
+      },
+      "ocr": {
+        "query": "sidecar index",
+        "first_relevant_rank": 1,
+        "top_1": true,
+        "ranked_filenames": [
+          "whiteboard-notes-project.jpg"
+        ],
+        "text": "WHITEBOARDNOTES ProjectPlan 1.Scan existing folders 2.Buildprivatesidecarindex 3.Searchwith evidencecards 4.ShipCLI demo SyntheticPrivateLens demo image.Nota real document."
+      },
+      "vlm": {
+        "expected_type": "document",
+        "predicted_type": "document",
+        "classification_correct": true,
+        "caption_terms": [
+          "project",
+          "sidecar"
+        ],
+        "matched_caption_terms": [
+          "project",
+          "sidecar"
+        ],
+        "caption_term_recall": 1.0,
+        "caption": "This image displays a presentation slide titled \"WHITEBOARD NOTES\" with a green header bar. The main content area lists four numbered steps for a project plan:\n1. Scan existing folders\n2. Build private sidecar index\n3. Search with evidence cards\n4. Ship CLI demo\n\nAt the bottom of the slide, there is a disclaimer: \"Synthetic PrivateLens demo image. Not a real document.\" The overall design is simple and clean, typical of a presentation or project planning tool."
+      },
+      "errors": {}
+    }
+  ]
+}

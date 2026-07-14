@@ -1,0 +1,116 @@
+name: Container CI
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: container-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test source
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: "3.11"
+      - name: Set up uv
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          version: "0.11.28"
+          python-version: "3.11"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - name: Synchronize locked test environment
+        run: uv sync --locked --extra dev
+      - name: Lint
+        run: uv run --frozen --extra dev python -m ruff check .
+      - name: Type check
+        run: uv run --frozen --extra dev python -m mypy privatelens
+      - name: Compile
+        run: uv run --frozen --extra dev python -m compileall privatelens tests
+      - name: Test
+        run: uv run --frozen --extra dev python -m pytest tests/ -v
+
+  verify:
+    name: Build and verify full image
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+      - name: Build full image for verification
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          build-args: PRIVATELENS_EXTRAS=full
+          load: true
+          push: false
+          tags: privatelens:container-ci
+          cache-from: type=gha,scope=container-ci
+          cache-to: type=gha,mode=max,scope=container-ci
+      - name: Verify HTTP health in non-root read-only runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          image_version="$(docker run --rm --entrypoint python \
+            privatelens:container-ci \
+            -c 'import privatelens; print(privatelens.__version__)')"
+          photos_dir="$RUNNER_TEMP/privatelens-empty-photos"
+          mkdir -p "$photos_dir"
+          container_id="$(docker run --detach --read-only \
+            --publish 127.0.0.1::8000 \
+            --mount "type=bind,source=$photos_dir,target=/photos,readonly" \
+            --tmpfs /tmp:rw,nosuid,nodev,size=256m,mode=1777 \
+            --tmpfs /data:rw,nosuid,nodev,size=128m,mode=1777 \
+            --tmpfs /app/.privatelens:rw,nosuid,nodev,size=128m,mode=1777 \
+            privatelens:container-ci)"
+          cleanup() {
+            status=$?
+            if [[ $status -ne 0 ]]; then
+              docker logs "$container_id" || true
+            fi
+            docker rm --force "$container_id" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          runtime_uid="$(docker exec "$container_id" id -u)"
+          test "$runtime_uid" -ne 0
+          test "$(docker inspect --format '{{.HostConfig.ReadonlyRootfs}}' "$container_id")" = "true"
+          test "$(docker inspect --format '{{range .Mounts}}{{if eq .Destination "/photos"}}{{.RW}}{{end}}{{end}}' "$container_id")" = "false"
+
+          port_mapping="$(docker port "$container_id" 8000/tcp | head -n 1)"
+          host_port="${port_mapping##*:}"
+          health_url="http://127.0.0.1:${host_port}/api/health"
+          healthy=false
+          for _ in {1..30}; do
+            if curl --fail --silent --output "$RUNNER_TEMP/privatelens-health.json" "$health_url"; then
+              healthy=true
+              break
+            fi
+            if [[ "$(docker inspect --format '{{.State.Running}}' "$container_id")" != "true" ]]; then
+              break
+            fi
+            sleep 2
+          done
+          test "$healthy" = "true"
+          jq --exit-status --arg version "$image_version" \
+            '.status == "ok" and .version == $version' \
+            "$RUNNER_TEMP/privatelens-health.json"

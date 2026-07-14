@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrivateLens - Photo Memory Search</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .header p { color: #888; }
+        .search-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .search-box {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid #333;
+            border-radius: 12px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .search-box:focus { border-color: #667eea; }
+        .recipes {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .recipe-chip {
+            padding: 0.4rem 1rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .recipe-chip:hover {
+            background: #667eea;
+            border-color: #667eea;
+        }
+        .results {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .result-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .result-card:hover {
+            transform: translateY(-2px);
+            border-color: #667eea;
+        }
+        .result-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #222;
+        }
+        .result-info {
+            padding: 1rem;
+        }
+        .result-score {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: #667eea;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .result-path {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.5rem;
+            word-break: break-all;
+        }
+        .result-explanation {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+        .stats {
+            text-align: center;
+            padding: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #667eea;
+        }
+        .sensitive-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: #e74c3c;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PrivateLens</h1>
+        <p>Local-first private photo memory search</p>
+    </div>
+
+    <div class="search-container">
+        <input type="text" class="search-box" id="searchInput" 
+               placeholder="Search your photos... (e.g., 'driver license', 'selfie with Alex')"
+               autocomplete="off">
+        <div class="recipes" id="recipes"></div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="results" id="results"></div>
+
+    <script>
+        let searchTimeout;
+        const searchInput = document.getElementById('searchInput');
+        const resultsDiv = document.getElementById('results');
+        const recipesDiv = document.getElementById('recipes');
+        const statsDiv = document.getElementById('stats');
+
+        // Load recipes
+        async function loadRecipes() {
+            try {
+                const res = await fetch('/api/recipes');
+                const data = await res.json();
+                const chips = data.recipes.map(recipe => {
+                    const chip = document.createElement('span');
+                    chip.className = 'recipe-chip';
+                    chip.dataset.recipe = recipe.name;
+                    chip.textContent = recipe.display_name;
+                    chip.addEventListener('click', () => {
+                        searchInput.value = chip.textContent;
+                        search(chip.dataset.recipe, chip.textContent);
+                    });
+                    return chip;
+                });
+                recipesDiv.replaceChildren(...chips);
+            } catch (e) {
+                console.error('Failed to load recipes:', e);
+            }
+        }
+
+        // Load stats
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                statsDiv.textContent = `${data.total_assets} photos | ${data.indexed} indexed | ${data.embeddings} embeddings | ${data.faces} faces detected`;
+            } catch (e) {
+                statsDiv.textContent = '';
+            }
+        }
+
+        // Search
+        async function search(recipe = null, query = null) {
+            const q = query || searchInput.value.trim();
+            if (!q) return;
+
+            resultsDiv.innerHTML = '<div class="loading">Searching...</div>';
+
+            try {
+                const url = recipe 
+                    ? `/api/search?q=${encodeURIComponent(q)}&recipe=${recipe}`
+                    : `/api/search?q=${encodeURIComponent(q)}`;
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                renderResults(data.results);
+            } catch (e) {
+                resultsDiv.innerHTML = '<div class="loading">Search failed. Is the server running?</div>';
+            }
+        }
+
+        function renderResults(results) {
+            if (!results || results.length === 0) {
+                resultsDiv.innerHTML = '<div class="loading">No results found</div>';
+                return;
+            }
+
+            const cards = results.map(result => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+
+                const image = document.createElement('img');
+                image.src = `/thumbnails/${encodeURIComponent(result.asset_id)}`;
+                image.alt = '';
+                image.addEventListener('error', () => { image.style.display = 'none'; });
+                card.appendChild(image);
+
+                const info = document.createElement('div');
+                info.className = 'result-info';
+
+                const score = document.createElement('span');
+                score.className = 'result-score';
+                const numericScore = Number(result.score);
+                score.textContent = `${(Number.isFinite(numericScore) ? numericScore * 100 : 0).toFixed(1)}%`;
+                info.appendChild(score);
+
+                if (result.is_sensitive) {
+                    const badge = document.createElement('span');
+                    badge.className = 'sensitive-badge';
+                    badge.textContent = 'SENSITIVE';
+                    info.appendChild(badge);
+                }
+
+                const path = document.createElement('div');
+                path.className = 'result-path';
+                path.textContent = result.path || '';
+                info.appendChild(path);
+
+                const explanation = document.createElement('div');
+                explanation.className = 'result-explanation';
+                explanation.textContent = result.explanation || '';
+                info.appendChild(explanation);
+
+                card.appendChild(info);
+                return card;
+            });
+            resultsDiv.replaceChildren(...cards);
+        }
+
+        // Debounced search
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => search(), 300);
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') search();
+        });
+
+        // Init
+        loadRecipes();
+        loadStats();
+    </script>
+</body>
+</html>

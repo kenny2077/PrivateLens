@@ -1,0 +1,70 @@
+services:
+  privatelens:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PRIVATELENS_EXTRAS: ${PRIVATELENS_EXTRAS:-full}
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+    image: privatelens:cpu
+    container_name: privatelens
+    restart: unless-stopped
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "127.0.0.1:${PRIVATELENS_PORT:-8000}:8000"
+    volumes:
+      - ${PHOTOS_DIR:-./photo}:/photos:ro
+      - privatelens-data:/data
+      - privatelens-models:/app/.privatelens/models
+      - privatelens-thumbnails:/app/.privatelens/thumbnails
+    environment:
+      - PRIVATELENS_DATA_DIR=/data
+      - PRIVATELENS_MODEL_CACHE_DIR=/app/.privatelens/models
+      - PRIVATELENS_THUMBNAIL_DIR=/app/.privatelens/thumbnails
+      - PRIVATELENS_LOCAL_ONLY=true
+      - PRIVATELENS_OLLAMA_URL=http://ollama:11434
+      - PRIVATELENS_VLM_MODEL=${PRIVATELENS_VLM_MODEL:-qwen3-vl:2b-instruct-q8_0}
+      - PRIVATELENS_ENCRYPTION_KEY=${PRIVATELENS_ENCRYPTION_KEY:-}
+    depends_on:
+      ollama:
+        condition: service_healthy
+      ollama-pull:
+        condition: service_completed_successfully
+    command: ["python", "-m", "privatelens.cli", "serve", "--host", "0.0.0.0", "--port", "8000"]
+    tmpfs:
+      - /tmp
+
+  ollama:
+    image: ollama/ollama:0.31.1@sha256:f1a705f2bd113fb8d15f85f7c217f0dc5f6bebda6b0cc42b82c3ad165ffcb9dc
+    container_name: ollama
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ollama-data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  ollama-pull:
+    image: ollama/ollama:0.31.1
+    restart: "no"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      ollama:
+        condition: service_healthy
+    entrypoint: ["/bin/ollama"]
+    command: ["pull", "${PRIVATELENS_VLM_MODEL:-qwen3-vl:2b-instruct-q8_0}"]
+
+volumes:
+  privatelens-data:
+  privatelens-models:
+  privatelens-thumbnails:
+  ollama-data:

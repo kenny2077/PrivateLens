@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff
+        entry: .venv/bin/python -m ruff check
+        language: system
+        args: [--fix]
+        types_or: [python, pyi, jupyter]
+      - id: ruff-format
+        name: ruff-format
+        entry: .venv/bin/python -m ruff format
+        language: system
+        types_or: [python, pyi, jupyter]

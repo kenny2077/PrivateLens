@@ -1,0 +1,323 @@
+{
+  "benchmark": "privatelens-search-quality-v1",
+  "version": 1,
+  "mode": "structured-signals-no-clip-no-vlm",
+  "summary": {
+    "case_count": 10,
+    "top_k": 5,
+    "hit_rate_at_5": 1.0,
+    "mean_precision_at_5": 0.22,
+    "mean_recall_at_5": 1.0,
+    "mean_reciprocal_rank": 1.0,
+    "minimum_hit_rate_at_5": 0.8,
+    "passed": true
+  },
+  "cases": [
+    {
+      "name": "government-id",
+      "recipe": "find_id_photo",
+      "query": "driver license",
+      "relevant_paths": [
+        "/benchmark/id/driver-license.jpg"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/id/driver-license.jpg",
+          "score": 1.0,
+          "explanation": "Path contains 'driver license'; OCR contains 'DRIVER LICENSE IDENTIFICATION'; Detected: id_card, document",
+          "signals": [
+            "path",
+            "ocr",
+            "detection"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "/benchmark/vehicles/car-dashboard.jpg",
+          "score": 0.312744,
+          "explanation": "Detected: car, vehicle",
+          "signals": [
+            "detection"
+          ]
+        },
+        {
+          "rank": 3,
+          "path": "/benchmark/documents/project-whiteboard.jpg",
+          "score": 0.303362,
+          "explanation": "Detected: whiteboard, document, text",
+          "signals": [
+            "detection"
+          ]
+        },
+        {
+          "rank": 4,
+          "path": "/benchmark/social/two-friends.jpg",
+          "score": 0.078186,
+          "explanation": "Faces: 2",
+          "signals": [
+            "face"
+          ]
+        },
+        {
+          "rank": 5,
+          "path": "/benchmark/pets/dog-at-park.jpg",
+          "score": 0.078186,
+          "explanation": "Detected: dog",
+          "signals": [
+            "detection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "single-person-selfie",
+      "recipe": "find_selfie",
+      "query": "selfie",
+      "relevant_paths": [
+        "/benchmark/social/selfie-one-person.jpg"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/social/selfie-one-person.jpg",
+          "score": 0.7,
+          "explanation": "Path contains 'selfie'; Faces: 1",
+          "signals": [
+            "path",
+            "face"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "two-person-photo",
+      "recipe": "find_two_person",
+      "query": "two people",
+      "relevant_paths": [
+        "/benchmark/social/two-friends.jpg"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/social/two-friends.jpg",
+          "score": 0.5,
+          "explanation": "Path contains 'two'; Faces: 2",
+          "signals": [
+            "path",
+            "face"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "phone-screenshot",
+      "recipe": "find_screenshot",
+      "query": "screenshot messages",
+      "relevant_paths": [
+        "/benchmark/screenshots/travel-messages.png"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/screenshots/travel-messages.png",
+          "score": 0.8,
+          "explanation": "Path contains 'screenshot, messages'; OCR contains 'SCREENSHOT MESSAGES BOARDING PASS'",
+          "signals": [
+            "path",
+            "ocr"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "store-receipt",
+      "recipe": "find_receipt",
+      "query": "Target receipt",
+      "relevant_paths": [
+        "/benchmark/finance/target-receipt.jpg"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/finance/target-receipt.jpg",
+          "score": 0.997,
+          "explanation": "Path contains 'target receipt'; OCR contains 'TARGET RECEIPT TOTAL TAX PAYMENT'; Detected: receipt",
+          "signals": [
+            "path",
+            "ocr",
+            "detection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pet-photo",
+      "recipe": "find_pet",
+      "query": "my dog",
+      "relevant_paths": [
+        "/benchmark/pets/dog-at-park.jpg"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/pets/dog-at-park.jpg",
+          "score": 0.485,
+          "explanation": "Path contains 'dog'; Detected: dog",
+          "signals": [
+            "path",
+            "detection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "whiteboard-document",
+      "recipe": "find_document",
+      "query": "whiteboard notes",
+      "relevant_paths": [
+        "/benchmark/documents/project-whiteboard.jpg"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/documents/project-whiteboard.jpg",
+          "score": 1.0,
+          "explanation": "Path contains 'whiteboard'; Detected: whiteboard, document, text",
+          "signals": [
+            "path",
+            "detection"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "/benchmark/id/driver-license.jpg",
+          "score": 0.244845,
+          "explanation": "Detected: id_card, document",
+          "signals": [
+            "detection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "car-photo",
+      "recipe": "find_car",
+      "query": "car dashboard",
+      "relevant_paths": [
+        "/benchmark/vehicles/car-dashboard.jpg"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/vehicles/car-dashboard.jpg",
+          "score": 1.0,
+          "explanation": "Path contains 'car dashboard'; Detected: car, vehicle",
+          "signals": [
+            "path",
+            "detection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sensitive-documents",
+      "recipe": "find_sensitive",
+      "query": "medical sensitive documents",
+      "relevant_paths": [
+        "/benchmark/id/driver-license.jpg",
+        "/benchmark/sensitive/medical-record.jpg"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.4,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/sensitive/medical-record.jpg",
+          "score": 0.9,
+          "explanation": "Path contains 'medical, sensitive'",
+          "signals": [
+            "path"
+          ]
+        },
+        {
+          "rank": 2,
+          "path": "/benchmark/id/driver-license.jpg",
+          "score": 0.6,
+          "explanation": "Detected: id_card, document",
+          "signals": [
+            "detection"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dated-memory",
+      "recipe": "find_memory",
+      "query": "family reunion 2025",
+      "relevant_paths": [
+        "/benchmark/memories/family-reunion-2025.jpg"
+      ],
+      "target_in_top_5": true,
+      "first_relevant_rank": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "results": [
+        {
+          "rank": 1,
+          "path": "/benchmark/memories/family-reunion-2025.jpg",
+          "score": 0.5,
+          "explanation": "Path contains 'family reunion 2025'; OCR contains 'FAMILY REUNION 2025'",
+          "signals": [
+            "path",
+            "ocr"
+          ]
+        }
+      ]
+    }
+  ]
+}
