@@ -25,7 +25,7 @@ API and web work should not weaken the scan/index/search workflow.
 ## Development Setup
 
 ```bash
-uv sync --python 3.11 --extra dev
+uv sync --python 3.11 --locked --extra dev
 source .venv/bin/activate
 ```
 
@@ -33,7 +33,7 @@ Install the full local ML stack when working on indexing, extractors, or
 model-dependent search:
 
 ```bash
-uv sync --python 3.11 --all-extras
+uv sync --python 3.11 --locked --all-extras
 ```
 
 To print the complete local setup path, including Ollama, model cache warmup, and verification commands:

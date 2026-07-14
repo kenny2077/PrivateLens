@@ -42,23 +42,24 @@ Code Architecture:
 
 Milestones — Three facts only, no raw logs:
 
-- 1. Release PR #2 is fast-forward merged into public `main` at `4be6a15` with
-  noreply-only history; post-merge Python 3.11–3.13 and Python/Actions CodeQL
-  pass with zero open CodeQL, Dependabot, or secret-scanning alerts.
-- 2. The release-final source and definitive wheel/sdist pass 184 tests from
-  both the worktree and extracted sdist, lint/format/typing/bytecode/lock,
-  pre-commit, strict metadata, privacy/integrity review, and three independent
-  release audits with no remaining source blocker.
+- 1. Release PR #2 is fast-forward merged into public `main`; canonical history
+  is noreply-only, and post-correction Python 3.11–3.13 plus Python/Actions
+  CodeQL pass with zero open CodeQL, Dependabot, or secret-scanning alerts.
+- 2. Release-final source, the locked Python 3.11 full-stack setup, and the
+  definitive wheel/sdist pass 185 tests from both the worktree and extracted
+  sdist, lint/format/typing/bytecode/lock, pre-commit, strict metadata,
+  privacy/integrity review, and independent audits with no source blocker.
 - 3. Aggregate-only evaluation on 15 local images reached 91.7% hit@1, 100%
   hit@5, and 95.8% MRR@5; final core/full arm64 images build, the full image
-  imports exact RapidOCR 1.4.4 and scans 15/15 read-only photos, and the core
-  passes non-root/read-only health plus a 100% hit@5 synthetic benchmark.
+  imports exact RapidOCR 1.4.4 and scans 15/15 read-only photos, the core passes
+  non-root/read-only health plus a 100% hit@5 synthetic benchmark, and both
+  Compose Ollama services use the same pinned image digest.
 
 Critical Bugs / Software or Hardware or Network Issues — Three logs maximum:
 
-- The signed-in PyPI pending-publisher form is prepared with the exact public
-  fields but awaits action-time confirmation before Add; no release tag may be
-  pushed before registration succeeds.
+- The GitHub `pypi` environment now disallows admin bypass and permits only `v*`
+  tags; the prepared PyPI publisher form still awaits action-time confirmation
+  before Add, and no release tag may be pushed before registration succeeds.
 - PyPI/GitHub/GHCR artifacts remain uncreated and no release tag exists; GHCR
   must stay explicitly `-core` only because embedded OCR-model rights are unclear.
 - Full Compose/Ollama remains unverified; CUDA and desktop are unsupported and
@@ -75,7 +76,8 @@ Reflect on current working direction is not worth continuing or have better idea
 ## 3. Next Stage Implementation Plan — Update after every meaningful session
 
 - Focus 1: With action-time confirmation, submit the prepared PyPI OIDC
-  publisher for `kenny2077/PrivateLens`, `release.yml`, environment `pypi`.
+  publisher for `kenny2077/PrivateLens`, `release.yml`, environment `pypi`;
+  GitHub already enforces a no-bypass, tag-only `v*` deployment boundary.
 - Focus 2: Create and push the signed-off `v1.0.0` tag only after the publisher
   exists; main protection now enforces admins and requires all six release gates.
 - Focus 3: Verify PyPI/GitHub/core-GHCR artifacts externally, update release
@@ -140,6 +142,10 @@ rtk proxy /tmp/privatelens-wheel-smoke/bin/privatelens benchmark --json
 rtk proxy docker compose config --quiet
 rtk proxy docker build --build-arg PRIVATELENS_EXTRAS=core -t privatelens:1.0.0-core .
 rtk proxy docker build --build-arg PRIVATELENS_EXTRAS=full -t privatelens:1.0.0 .
+
+# verify the PyPI release environment boundary
+rtk proxy gh api repos/kenny2077/PrivateLens/environments/pypi
+rtk proxy gh api repos/kenny2077/PrivateLens/environments/pypi/deployment-branch-policies
 
 # supported first-run CLI path; face and VLM remain opt-in
 rtk proxy privatelens scan /path/to/photos --dry-run --json
